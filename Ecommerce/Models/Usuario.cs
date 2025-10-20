@@ -1,9 +1,12 @@
-namespace Models.Usuario;
+using Models.Pedido;
 
 public class Usuario
 {
-    public int id { get; set; }
-    public string nome { get; set; }
-    public string email { get; set; }
-    public string quantidade { get; set; }
+    public int Id { get; set; }
+    public string Nome { get; set; } = "";
+    public string Email { get; set; } = "";
+    public string Endereco { get; set; } = "";
+
+    public ICollection<Pedido> Pedidos { get; set; } = new List<Pedido>();
+    public Carrinho? Carrinho { get; set; }
 }
