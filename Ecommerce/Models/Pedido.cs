@@ -1,15 +1,14 @@
-namespace Models.Pedido;
+namespace Ecommerce.Models;
 
 public class Pedido
 {
     public int Id { get; set; }
+    public int UsuarioId { get; set; }
     public DateTime DataPedido { get; set; } = DateTime.Now;
-    public decimal ValorTotal { get; set; }
-    public string Status { get; set; } = "Em processamento";
+    public string Status { get; set; } = "Em andamento";
 
-    public int ClienteId { get; set; }
-    public ICollection<ItemPedido> Itens { get; set; } = new List<ItemPedido>();
+    // Relacionamentos
+    public Usuario? Usuario { get; set; }
+    public ICollection<ItemPedido>? Itens { get; set; }
     public Fatura? Fatura { get; set; }
-    public StatusEntrega? StatusEntrega { get; set; }
-    public MeioPagamento? MeioPagamento { get; set; }
 }
