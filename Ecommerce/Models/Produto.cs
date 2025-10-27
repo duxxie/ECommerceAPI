@@ -1,13 +1,13 @@
+namespace Ecommerce.Models;
+
 public class Produto
 {
-    public Guid Id { get; set; }
-    public string? Nome { get; set; }
-    public string? Descricao { get; set; }
+    public int Id { get; set; }
+    public string Nome { get; set; } = string.Empty;
+    public string Descricao { get; set; } = string.Empty;
     public decimal Preco { get; set; }
     public int Estoque { get; set; }
-    public string? Categoria { get; set; }
-    public bool Ativo { get; set; }
-    
-    public ICollection<ItemCarrinho>? ItensCarrinho { get; set; }
+
+    // Relacionamentos
     public ICollection<ItemPedido>? ItensPedido { get; set; }
 }
