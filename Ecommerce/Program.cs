@@ -28,4 +28,11 @@ app.MapClienteRoutes();
 app.MapPedidoRoutes();
 app.MapCarrinhoRoutes();
 
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    db.Database.EnsureCreated(); // cria o banco se não existir
+    DataSeeder.Seed(db); // popula os dados iniciais
+}
+
 app.Run();
