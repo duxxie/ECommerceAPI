@@ -3,12 +3,13 @@ namespace Ecommerce.Models;
 public class Pedido
 {
     public int Id { get; set; }
-    public int UsuarioId { get; set; }
+    public int ClienteId { get; set; }
     public DateTime DataPedido { get; set; } = DateTime.Now;
-    public string Status { get; set; } = "Em andamento";
+    public decimal ValorTotal { get; set; }
 
-    // Relacionamentos
-    public Usuario? Usuario { get; set; }
-    public ICollection<ItemPedido>? Itens { get; set; }
+    //Relacionamentos
+    public Cliente? Cliente { get; set; }
+    public List<ItemPedido> Itens { get; set; } = new();
     public Fatura? Fatura { get; set; }
+    public StatusEntrega? StatusEntrega { get; set; }
 }
