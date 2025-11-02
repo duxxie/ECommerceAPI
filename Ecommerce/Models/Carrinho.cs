@@ -1,11 +1,13 @@
-namespace Ecommerce.Models;
-
-public class Carrinho
+namespace Ecommerce.Models
 {
-    public int Id { get; set; }
-    public int ClienteId { get; set; }
+    public class Carrinho
+    {
+        public int Id { get; set; }
+        public int ClienteId { get; set; }
+        public Cliente? Cliente { get; set; }
 
-    //Relacionamentos
-    public List<ItemCarrinho> Itens { get; set; } = new();
-    public Cliente? Cliente { get; set; }
+        public List<ItemCarrinho> Itens { get; set; } = new();
+
+        public decimal Total => Itens.Sum(i => i.Quantidade * i.PrecoUnitario);
+    }
 }

@@ -1,11 +1,9 @@
-namespace Ecommerce.Models
+namespace Ecommerce.DTOs
 {
-    public class StatusEntrega
+    public class StatusEntregaDTO
     {
         public int Id { get; set; }
-        public int PedidoId { get; set; }
-        public Pedido? Pedido { get; set; }
-
+        public string Descricao { get; set; } = string.Empty;
         public string Status { get; set; } = "Pendente"; // Pendente, Enviado, Entregue
         public DateTime? DataEnvio { get; set; }
         public DateTime? DataEntrega { get; set; }

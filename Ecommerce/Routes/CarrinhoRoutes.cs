@@ -1,36 +1,39 @@
-using Microsoft.EntityFrameworkCore;
 using Ecommerce.Data;
 using Ecommerce.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Ecommerce.Routes;
-
-public static class CarrinhoRoutes
+namespace Ecommerce.Routes
 {
-    public static void MapCarrinhoRoutes(this IEndpointRouteBuilder app)
+    public static class CarrinhoRoutes
     {
-        var group = app.MapGroup("/carrinhos");
-
-        group.MapGet("/", async (AppDbContext db) =>
-            await db.Carrinhos
-                .Include(c => c.Itens)
-                .ThenInclude(i => i.Produto)
-                .ToListAsync());
-
-        group.MapPost("/", async (AppDbContext db, Carrinho carrinho) =>
+        public static void MapCarrinhoRoutes(this WebApplication app)
         {
-            db.Carrinhos.Add(carrinho);
-            await db.SaveChangesAsync();
-            return Results.Created($"/carrinhos/{carrinho.Id}", carrinho);
-        });
+            var group = app.MapGroup("/carrinhos");
 
-        group.MapDelete("/{id:int}", async (AppDbContext db, int id) =>
-        {
-            var carrinho = await db.Carrinhos.FindAsync(id);
-            if (carrinho is null) return Results.NotFound();
+            group.MapGet("/", async (AppDbContext db) =>
+                await db.Carrinhos.Include(c => c.Itens).ThenInclude(i => i.Produto).ToListAsync());
 
-            db.Carrinhos.Remove(carrinho);
-            await db.SaveChangesAsync();
-            return Results.Ok(carrinho);
-        });
+            group.MapGet("/{id:int}", async (int id, AppDbContext db) =>
+                await db.Carrinhos.Include(c => c.Itens).ThenInclude(i => i.Produto)
+                    .FirstOrDefaultAsync(c => c.Id == id)
+                    is Carrinho carrinho ? Results.Ok(carrinho) : Results.NotFound());
+
+            group.MapPost("/", async (Carrinho carrinho, AppDbContext db) =>
+            {
+                db.Carrinhos.Add(carrinho);
+                await db.SaveChangesAsync();
+                return Results.Created($"/carrinhos/{carrinho.Id}", carrinho);
+            });
+
+            group.MapDelete("/{id:int}", async (int id, AppDbContext db) =>
+            {
+                var carrinho = await db.Carrinhos.FindAsync(id);
+                if (carrinho is null) return Results.NotFound();
+
+                db.Carrinhos.Remove(carrinho);
+                await db.SaveChangesAsync();
+                return Results.NoContent();
+            });
+        }
     }
 }
