@@ -1,53 +1,37 @@
-using Microsoft.EntityFrameworkCore;
 using Ecommerce.Data;
 using Ecommerce.Models;
+using Microsoft.EntityFrameworkCore;
 
-namespace Ecommerce.Routes;
-
-public static class ProdutoRoutes
+namespace Ecommerce.Routes
 {
-    public static void MapProdutoRoutes(this IEndpointRouteBuilder app)
+    public static class ProdutoRoutes
     {
-        var group = app.MapGroup("/produtos");
-
-        group.MapGet("/", async (AppDbContext db) =>
-            await db.Produtos.ToListAsync());
-
-        group.MapGet("/{id:int}", async (AppDbContext db, int id) =>
-            await db.Produtos.FindAsync(id) is Produto produto
-                ? Results.Ok(produto)
-                : Results.NotFound());
-
-        group.MapPost("/", async (AppDbContext db, Produto produto) =>
+        public static void MapProdutoRoutes(this WebApplication app)
         {
-            db.Produtos.Add(produto);
-            await db.SaveChangesAsync();
-            return Results.Created($"/produtos/{produto.Id}", produto);
-        });
+            var group = app.MapGroup("/produtos");
 
-        group.MapPut("/{id:int}", async (AppDbContext db, int id, Produto produtoAtualizado) =>
-        {
-            var produto = await db.Produtos.FindAsync(id);
-            if (produto is null) return Results.NotFound();
+            group.MapGet("/", async (AppDbContext db) =>
+                await db.Produtos.ToListAsync());
 
-            produto.Nome = produtoAtualizado.Nome;
-            produto.Descricao = produtoAtualizado.Descricao;
-            produto.Preco = produtoAtualizado.Preco;
-            produto.Estoque = produtoAtualizado.Estoque;
-            produto.Categoria = produtoAtualizado.Categoria;
+            group.MapGet("/{id:int}", async (int id, AppDbContext db) =>
+                await db.Produtos.FindAsync(id) is Produto p ? Results.Ok(p) : Results.NotFound());
 
-            await db.SaveChangesAsync();
-            return Results.Ok(produto);
-        });
+            group.MapPost("/", async (Produto produto, AppDbContext db) =>
+            {
+                db.Produtos.Add(produto);
+                await db.SaveChangesAsync();
+                return Results.Created($"/produtos/{produto.Id}", produto);
+            });
 
-        group.MapDelete("/{id:int}", async (AppDbContext db, int id) =>
-        {
-            var produto = await db.Produtos.FindAsync(id);
-            if (produto is null) return Results.NotFound();
+            group.MapDelete("/{id:int}", async (int id, AppDbContext db) =>
+            {
+                var produto = await db.Produtos.FindAsync(id);
+                if (produto is null) return Results.NotFound();
 
-            db.Produtos.Remove(produto);
-            await db.SaveChangesAsync();
-            return Results.Ok(produto);
-        });
+                db.Produtos.Remove(produto);
+                await db.SaveChangesAsync();
+                return Results.NoContent();
+            });
+        }
     }
 }

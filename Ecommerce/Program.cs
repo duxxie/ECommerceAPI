@@ -1,19 +1,28 @@
-using Microsoft.EntityFrameworkCore;
 using Ecommerce.Data;
 using Ecommerce.Routes;
+using Microsoft.EntityFrameworkCore;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Banco de dados SQLite
+// ------------------ Configurações de EF Core ------------------
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite("Data Source=vendas.db"));
+    options.UseSqlite("Data Source=ecommerce.db"));
 
+// ------------------ Configurações de JSON para evitar ciclos ------------------
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.WriteIndented = true;
+});
+
+// ------------------ Swagger ------------------
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Swagger
+// ------------------ Middleware ------------------
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -21,18 +30,23 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseAuthorization();
 
-// Registrar endpoints
+// ------------------ Mapear rotas ------------------
 app.MapProdutoRoutes();
 app.MapClienteRoutes();
-app.MapPedidoRoutes();
 app.MapCarrinhoRoutes();
+app.MapPedidoRoutes();
+app.MapFaturaRoutes();
+app.MapStatusEntregaRoutes();
+app.MapMeioPagamentoRoutes();
 
+// ------------------ Seed do banco ------------------
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
     db.Database.EnsureCreated(); // cria o banco se não existir
-    DataSeeder.Seed(db); // popula os dados iniciais
+    DataSeeder.Seed(db);
 }
 
 app.Run();

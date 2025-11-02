@@ -8,6 +8,21 @@ public static class DataSeeder
     {
         var random = new Random();
 
+        // ------------------ MEIOS DE PAGAMENTO ------------------
+        if (!context.MeiosPagamento.Any())
+        {
+            var tipos = new[] { "Cartão de Crédito", "Pix", "Boleto", "Transferência" };
+            foreach (var tipo in tipos)
+            {
+                context.MeiosPagamento.Add(new MeioPagamento
+                {
+                    Tipo = tipo,
+                    Descricao = $"Meio de pagamento {tipo}"
+                });
+            }
+            context.SaveChanges();
+        }
+
         // ------------------ PRODUTOS ------------------
         if (!context.Produtos.Any())
         {
@@ -72,7 +87,6 @@ public static class DataSeeder
                     Itens = new List<ItemCarrinho>()
                 };
 
-                // Adiciona 1 a 5 produtos aleatórios no carrinho
                 int itensNoCarrinho = random.Next(1, 6);
                 for (int i = 0; i < itensNoCarrinho; i++)
                 {
@@ -80,7 +94,8 @@ public static class DataSeeder
                     carrinho.Itens.Add(new ItemCarrinho
                     {
                         ProdutoId = produto.Id,
-                        Quantidade = random.Next(1, 5)
+                        Quantidade = random.Next(1, 5),
+                        PrecoUnitario = produto.Preco
                     });
                 }
 
@@ -134,17 +149,18 @@ public static class DataSeeder
         if (!context.Faturas.Any())
         {
             var pedidos = context.Pedidos.ToList();
-            var meios = new[] { "Cartão", "Pix", "Boleto", "Transferência" };
+            var meios = context.MeiosPagamento.ToList();
 
             foreach (var pedido in pedidos)
             {
-                var meio = meios[random.Next(meios.Length)];
+                var meio = meios[random.Next(meios.Count)];
                 context.Faturas.Add(new Fatura
                 {
                     PedidoId = pedido.Id,
                     ValorTotal = pedido.ValorTotal,
                     DataEmissao = pedido.DataPedido.AddMinutes(10),
-                    MeioPagamento = meio
+                    MeioPagamentoId = meio.Id,
+                    Pago = random.Next(0, 2) == 1
                 });
             }
 
@@ -160,10 +176,15 @@ public static class DataSeeder
             foreach (var pedido in pedidos)
             {
                 var status = statusOptions[random.Next(statusOptions.Length)];
+                var dataEnvio = status == "Enviado" || status == "Entregue" ? DateTime.Now.AddMinutes(-random.Next(30, 300)) : (DateTime?)null;
+                var dataEntrega = status == "Entregue" ? DateTime.Now.AddMinutes(-random.Next(10, 100)) : (DateTime?)null;
+
                 context.StatusEntregas.Add(new StatusEntrega
                 {
+                    PedidoId = pedido.Id,
                     Status = status,
-                    AtualizadoEm = DateTime.Now,
+                    DataEnvio = dataEnvio,
+                    DataEntrega = dataEntrega
                 });
             }
 
