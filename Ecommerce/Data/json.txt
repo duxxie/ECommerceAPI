@@ -1,0 +1,13 @@
+{
+        "nome": "Geferson Rodrigues",
+        "email": "geferson.rodrigues@example.com",
+        "telefone": "(41) 99123-4501",
+        "endereco": "Rua das Araucárias, 120 - Bigorrilho, Curitiba - PR"
+    },
+    {
+        "nome": "Maria Eduarda Souza",
+        "email": "maria.eduarda.souza@example.com",
+        "telefone": "(11) 99654-7821",
+        "endereco": "Av. Paulista, 1578 - Bela Vista, São Paulo - SP"
+    }
+}

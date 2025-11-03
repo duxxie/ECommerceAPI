@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Ecommerce.Models
 {
     public class Fatura
@@ -5,6 +7,7 @@ namespace Ecommerce.Models
         public int Id { get; set; }
 
         public int PedidoId { get; set; }
+        [JsonIgnore]//Corrigir depois DTO
         public Pedido? Pedido { get; set; }
 
         public DateTime DataEmissao { get; set; } = DateTime.Now;
