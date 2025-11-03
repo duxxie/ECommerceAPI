@@ -1,3 +1,5 @@
+using System.Text.Json.Serialization;
+
 namespace Ecommerce.Models
 {
     public class MeioPagamento
@@ -10,6 +12,7 @@ namespace Ecommerce.Models
         public string? Descricao { get; set; }
 
         // Relacionamentos
+        [JsonIgnore]//Corrigir depois DTO
         public List<Fatura> Faturas { get; set; } = new();
     }
 }
