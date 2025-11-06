@@ -12,103 +12,103 @@ namespace Ecommerce.Routes
             var group = app.MapGroup("/pedidos");
 
             // GET /pedidos
-            group.MapGet("/", async (AppDbContext db) =>
-            {
-                var lista = await db.Pedidos
-                    .Select(p => new PedidoDTO
-                    {
-                        Id = p.Id,
-                        DataPedido = p.DataPedido,
-                        ValorTotal = p.ValorTotal,
+            // group.MapGet("/", async (AppDbContext db) =>
+            // {
+            //     var lista = await db.Pedidos
+            //         .Select(p => new PedidoDTO
+            //         {
+            //             Id = p.Id,
+            //             DataPedido = p.DataPedido,
+            //             ValorTotal = p.ValorTotal,
 
-                        Cliente = p.Cliente == null ? null : new ClienteDTO
-                        {
-                            Id = p.Cliente.Id,
-                            Nome = p.Cliente.Nome
-                        },
+            //             Cliente = p.Cliente == null ? null : new ClienteDTO
+            //             {
+            //                 Id = p.Cliente.Id,
+            //                 Nome = p.Cliente.Nome
+            //             },
 
-                        Itens = p.Itens.Select(i => new ProdutoDTO
-                        {
-                            Id = i.Produto!.Id,
-                            Nome = i.Produto.Nome,
-                            Preco = i.Produto.Preco,
-                            Quantidade = i.Quantidade
-                        }).ToList(),
+            //             Itens = p.Itens.Select(i => new ProdutoDTO
+            //             {
+            //                 Id = i.Produto!.Id,
+            //                 Nome = i.Produto.Nome,
+            //                 Preco = i.Produto.Preco,
+            //                 Quantidade = i.Quantidade
+            //             }).ToList(),
 
-                        Fatura = p.Fatura == null ? null : new FaturaDTO
-                        {
-                            Id = p.Fatura.Id,
-                            ValorTotal = p.Fatura.ValorTotal,
-                            MeioPagamento = p.Fatura.MeioPagamento == null ? null : new MeioPagamentoDTO
-                            {
-                                Id = p.Fatura.MeioPagamento.Id,
-                                Tipo = p.Fatura.MeioPagamento.Tipo,
-                                Descricao = p.Fatura.MeioPagamento.Descricao
-                            }
-                        },
+            //             Fatura = p.Fatura == null ? null : new FaturaDTO
+            //             {
+            //                 Id = p.Fatura.Id,
+            //                 ValorTotal = p.Fatura.ValorTotal,
+            //                 MeioPagamento = p.Fatura.MeioPagamento == null ? null : new MeioPagamentoDTO
+            //                 {
+            //                     Id = p.Fatura.MeioPagamento.Id,
+            //                     Tipo = p.Fatura.MeioPagamento.Tipo,
+            //                     Descricao = p.Fatura.MeioPagamento.Descricao
+            //                 }
+            //             },
 
-                        StatusEntrega = p.StatusEntrega == null ? null : new StatusEntregaDTO
-                        {
-                            Id = p.StatusEntrega.Id,
-                            Status = p.StatusEntrega.Status,
-                            DataEnvio = p.StatusEntrega.DataEnvio,
-                            DataEntrega = p.StatusEntrega.DataEntrega
-                        }
-                    })
-                    .ToListAsync();
+            //             StatusEntrega = p.StatusEntrega == null ? null : new StatusEntregaDTO
+            //             {
+            //                 Id = p.StatusEntrega.Id,
+            //                 Status = p.StatusEntrega.Status,
+            //                 DataEnvio = p.StatusEntrega.DataEnvio,
+            //                 DataEntrega = p.StatusEntrega.DataEntrega
+            //             }
+            //         })
+            //         .ToListAsync();
 
-                return Results.Ok(lista);
-            });
+            //     return Results.Ok(lista);
+            // });
 
             // GET /pedidos/{id}
-            group.MapGet("/{id:int}", async (int id, AppDbContext db) =>
-            {
-                var pedido = await db.Pedidos
-                    .Where(p => p.Id == id)
-                    .Select(p => new PedidoDTO
-                    {
-                        Id = p.Id,
-                        DataPedido = p.DataPedido,
-                        ValorTotal = p.ValorTotal,
+            // group.MapGet("/{id:int}", async (int id, AppDbContext db) =>
+            // {
+            //     var pedido = await db.Pedidos
+            //         .Where(p => p.Id == id)
+            //         .Select(p => new PedidoDTO
+            //         {
+            //             Id = p.Id,
+            //             DataPedido = p.DataPedido,
+            //             ValorTotal = p.ValorTotal,
 
-                        Cliente = p.Cliente == null ? null : new ClienteDTO
-                        {
-                            Id = p.Cliente.Id,
-                            Nome = p.Cliente.Nome
-                        },
+            //             Cliente = p.Cliente == null ? null : new ClienteDTO
+            //             {
+            //                 Id = p.Cliente.Id,
+            //                 Nome = p.Cliente.Nome
+            //             },
 
-                        Itens = p.Itens.Select(i => new ProdutoDTO
-                        {
-                            Id = i.Produto!.Id,
-                            Nome = i.Produto.Nome,
-                            Preco = i.Produto.Preco,
-                            Quantidade = i.Quantidade
-                        }).ToList(),
+            //             Itens = p.Itens.Select(i => new ProdutoDTO
+            //             {
+            //                 Id = i.Produto!.Id,
+            //                 Nome = i.Produto.Nome,
+            //                 Preco = i.Produto.Preco,
+            //                 Quantidade = i.Quantidade
+            //             }).ToList(),
 
-                        Fatura = p.Fatura == null ? null : new FaturaDTO
-                        {
-                            Id = p.Fatura.Id,
-                            ValorTotal = p.Fatura.ValorTotal,
-                            MeioPagamento = p.Fatura.MeioPagamento == null ? null : new MeioPagamentoDTO
-                            {
-                                Id = p.Fatura.MeioPagamento.Id,
-                                Tipo = p.Fatura.MeioPagamento.Tipo,
-                                Descricao = p.Fatura.MeioPagamento.Descricao
-                            }
-                        },
+            //             Fatura = p.Fatura == null ? null : new FaturaDTO
+            //             {
+            //                 Id = p.Fatura.Id,
+            //                 ValorTotal = p.Fatura.ValorTotal,
+            //                 MeioPagamento = p.Fatura.MeioPagamento == null ? null : new MeioPagamentoDTO
+            //                 {
+            //                     Id = p.Fatura.MeioPagamento.Id,
+            //                     Tipo = p.Fatura.MeioPagamento.Tipo,
+            //                     Descricao = p.Fatura.MeioPagamento.Descricao
+            //                 }
+            //             },
 
-                        StatusEntrega = p.StatusEntrega == null ? null : new StatusEntregaDTO
-                        {
-                            Id = p.StatusEntrega.Id,
-                            Status = p.StatusEntrega.Status,
-                            DataEnvio = p.StatusEntrega.DataEnvio,
-                            DataEntrega = p.StatusEntrega.DataEntrega
-                        }
-                    })
-                    .FirstOrDefaultAsync();
+            //             StatusEntrega = p.StatusEntrega == null ? null : new StatusEntregaDTO
+            //             {
+            //                 Id = p.StatusEntrega.Id,
+            //                 Status = p.StatusEntrega.Status,
+            //                 DataEnvio = p.StatusEntrega.DataEnvio,
+            //                 DataEntrega = p.StatusEntrega.DataEntrega
+            //             }
+            //         })
+            //         .FirstOrDefaultAsync();
 
-                return pedido is not null ? Results.Ok(pedido) : Results.NotFound();
-            });
+            //     return pedido is not null ? Results.Ok(pedido) : Results.NotFound();
+            // });
 
             // POST /pedidos  (aceita o model para simplificar)
             group.MapPost("/", async (Pedido pedido, AppDbContext db) =>

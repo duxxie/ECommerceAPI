@@ -11,87 +11,78 @@ namespace Ecommerce.Routes
         {
             var group = app.MapGroup("/carrinhos");
 
-            // 🔹 GET: /carrinhos
+
             group.MapGet("/", async (AppDbContext db) =>
-            {
-                var carrinhos = await db.Carrinhos
-                    .Include(c => c.Itens)
-                    .ThenInclude(i => i.Produto)
-                    .Include(c => c.Cliente)
-                    .ToListAsync();
-
-                var carrinhoDtos = carrinhos.Select(c => new CarrinhoDTO
-                {
-                    Id = c.Id,
-                    ClienteId = c.ClienteId,
-                    NomeCliente = c.Cliente?.Nome ?? "Cliente não identificado",
-                    Itens = c.Itens.Select(i => new ItemCarrinhoDTO
+                await db.Carrinhos
+                    .AsNoTracking()
+                    .Select(c => new
                     {
-                        Id = i.Id,
-                        ProdutoId = i.ProdutoId,
-                        NomeProduto = i.Produto.Nome,
-                        Quantidade = i.Quantidade,
-                        Preco = i.Produto.Preco
-                    }).ToList()
-                });
+                        c.Id,
+                        c.ClienteId,
+                        Total = c.Itens.Sum(i => (decimal?)(i.Quantidade * i.PrecoUnitario)) ?? 0m,
+                        TotalItens = c.Itens.Sum(i => (int?)i.Quantidade) ?? 0,
+                        Itens = c.Itens.Select(i => new
+                        {
+                            i.Id,
+                            i.CarrinhoId,
+                            i.ProdutoId,
+                            i.Quantidade,
+                            i.PrecoUnitario
+                        })
+                    })
+                    .ToListAsync()
+                );
 
-                return Results.Ok(carrinhoDtos);
-            });
-
-            // 🔹 GET: /carrinhos/{clienteId}
-            group.MapGet("/cliente/{clienteId:int}", async (int clienteId, AppDbContext db) =>
+          
+            group.MapGet("/{carrinhoId:int}", async (int carrinhoId, AppDbContext db) =>
             {
                 var carrinho = await db.Carrinhos
-                    .Include(c => c.Itens)
-                    .ThenInclude(i => i.Produto)
-                    .Include(c => c.Cliente)
-                    .FirstOrDefaultAsync(c => c.ClienteId == clienteId);
-
-                if (carrinho is null)
-                    return Results.NotFound();
-
-                var carrinhoDto = new CarrinhoDTO
-                {
-                    Id = carrinho.Id,
-                    ClienteId = carrinho.ClienteId,
-                    NomeCliente = carrinho.Cliente?.Nome ?? "Cliente não identificado",
-                    Itens = carrinho.Itens.Select(i => new ItemCarrinhoDTO
+                    .AsNoTracking()
+                    .Where(c => c.Id == carrinhoId)
+                    .Select(c => new
                     {
-                        Id = i.Id,
-                        ProdutoId = i.ProdutoId,
-                        NomeProduto = i.Produto.Nome,
-                        Quantidade = i.Quantidade,
-                        Preco = i.Produto.Preco
-                    }).ToList()
-                };
-
-                return Results.Ok(carrinhoDto);
+                        c.Id,
+                        Total = c.Itens.Sum(i => (decimal?)(i.Quantidade * i.PrecoUnitario)) ?? 0m,
+                        TotalItens = c.Itens.Sum(i => (int?)i.Quantidade) ?? 0,
+                        Itens = c.Itens.Select(i => new
+                        {
+                            i.Id,
+                            i.CarrinhoId,
+                            i.ProdutoId,
+                            i.Quantidade,
+                            i.PrecoUnitario
+                        }),
+                        c.ClienteId,
+                        Cliente = new
+                        {
+                            c.Cliente.Nome,
+                            c.Cliente.Email,
+                            c.Cliente.Telefone
+                        }
+                    })
+                    .FirstOrDefaultAsync();
+                return carrinho is null ? Results.NotFound() : Results.Ok(carrinho);
+                                
             });
 
-            // 🔹 POST: /carrinhos
-            group.MapPost("/", async (AppDbContext db, CarrinhoCreateDTO carrinhoDto) =>
+            
+            group.MapPost("/", async (AppDbContext db, Carrinho carrinhoCreate) =>
             {
-                var clienteExiste = await db.Clientes.AnyAsync(c => c.Id == carrinhoDto.ClienteId);
+                var clienteExiste = await db.Clientes.AnyAsync(c => c.Id == carrinhoCreate.ClienteId);
                 if (!clienteExiste)
                     return Results.BadRequest("Cliente não encontrado.");
 
                 var carrinho = new Carrinho
                 {
-                    ClienteId = carrinhoDto.ClienteId,
-                    Itens = carrinhoDto.Itens.Select(i => new ItemCarrinho
-                    {
-                        ProdutoId = i.ProdutoId,
-                        Quantidade = i.Quantidade
-                    }).ToList()
+                    ClienteId = carrinhoCreate.ClienteId,
                 };
 
                 db.Carrinhos.Add(carrinho);
                 await db.SaveChangesAsync();
 
-                return Results.Created($"/carrinhos/{carrinho.Id}", new { carrinho.Id });
+                return Results.Created($"/carrinhos/{carrinho.Id}", carrinho);
             });
 
-            // 🔹 DELETE: /carrinhos/{id}
             group.MapDelete("/{id:int}", async (int id, AppDbContext db) =>
             {
                 var carrinho = await db.Carrinhos.FindAsync(id);
