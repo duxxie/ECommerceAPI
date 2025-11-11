@@ -8,8 +8,7 @@ namespace Ecommerce.Models
         public decimal Preco { get; set; }
         public int Estoque { get; set; }
         public string Categoria { get; set; } = string.Empty;
-
-        public List<ItemPedido> ItensPedido { get; set; } = new();
-        public List<ItemCarrinho> ItensCarrinho { get; set; } = new();
+        // public List<ItemPedido> ItensPedido { get; set; } = new();
+        // public List<ItemCarrinho> ItensCarrinho { get; set; } = new();
     }
 }

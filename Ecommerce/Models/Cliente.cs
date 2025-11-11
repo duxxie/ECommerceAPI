@@ -6,8 +6,9 @@ namespace Ecommerce.Models
         public string Nome { get; set; } = string.Empty;
         public string Email { get; set; } = string.Empty;
         public string Telefone { get; set; } = string.Empty;
-
+        public string Endereco { get; set; } = string.Empty;
         public List<Pedido> Pedidos { get; set; } = new();
-        public Carrinho? Carrinhos { get; set; }
+        public Carrinho? Carrinho { get; set; }
+        public int IdCarrinho { get; set; }
     }
 }

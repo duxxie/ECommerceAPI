@@ -10,11 +10,11 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite("Data Source=ecommerce.db"));
 
 // ------------------ Configurações de JSON para evitar ciclos ------------------
-builder.Services.AddControllers().AddJsonOptions(options =>
-{
-    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
-    options.JsonSerializerOptions.WriteIndented = true;
-});
+// builder.Services.AddControllers().AddJsonOptions(options =>
+// {
+//     options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+//     options.JsonSerializerOptions.WriteIndented = true;
+// });
 
 // ------------------ Swagger ------------------
 builder.Services.AddEndpointsApiExplorer();
@@ -30,23 +30,22 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-app.UseAuthorization();
+//app.UseAuthorization();
 
 // ------------------ Mapear rotas ------------------
 app.MapProdutoRoutes();
 app.MapClienteRoutes();
 app.MapCarrinhoRoutes();
+app.MapItemCarrinhoRoutes();
 app.MapPedidoRoutes();
 app.MapFaturaRoutes();
-app.MapStatusEntregaRoutes();
-app.MapMeioPagamentoRoutes();
 
 // ------------------ Seed do banco ------------------
 using (var scope = app.Services.CreateScope())
 {
     var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-    db.Database.EnsureCreated(); // cria o banco se não existir
-    DataSeeder.Seed(db);
+    db.Database.Migrate(); // cria o banco se não existir
+    //DataSeeder.Seed(db);
 }
 
 app.Run();
