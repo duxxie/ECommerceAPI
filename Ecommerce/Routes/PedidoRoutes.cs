@@ -41,7 +41,7 @@ namespace Ecommerce.Routes
                     .Select(p => new
                     {
                         p.Id,
-                        p.DataPedido,
+                        Pedido = p.DataPedido,
                         p.StatusEntrega,
                         p.ValorTotal,
                         Itens = p.Itens.Select(i => new
@@ -51,7 +51,7 @@ namespace Ecommerce.Routes
                             i.Quantidade,
                             i.PrecoUnitario
                         }),
-                        Cliente = new
+                        Cliente = p.Cliente == null ? null : new
                         {
                             p.ClienteId,
                             p.Cliente.Nome,
@@ -94,11 +94,14 @@ namespace Ecommerce.Routes
 
                 foreach (var i in carrinho.Itens)
                 {
-                    if (i.Produto.Estoque < i.Quantidade)
+                    if(i.Produto != null)
                     {
-                        throw new InvalidOperationException($"Sem estoque para {i.Produto.Nome}.");
+                        if (i.Produto.Estoque < i.Quantidade)
+                        {
+                            throw new InvalidOperationException($"Sem estoque para {i.Produto.Nome}.");
+                        }
+                        i.Produto.Estoque -= i.Quantidade;
                     }
-                    i.Produto.Estoque -= i.Quantidade;
                 }
 
                 carrinho.Itens.Clear();

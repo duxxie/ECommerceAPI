@@ -54,7 +54,7 @@ namespace Ecommerce.Routes
                             c.Carrinho.Id,
                             c.Carrinho.ClienteId,
                             Total = c.Carrinho.Itens.Sum(i => (decimal?)(i.Quantidade * i.PrecoUnitario)) ?? 0m,
-                            TotalItens = c.Carrinho.Itens.Sum(i => (int?) i.Quantidade) ?? 0,
+                            TotalItens = c.Carrinho.Itens.Sum(i => (int?)i.Quantidade) ?? 0,
 
                             Itens = c.Carrinho.Itens.Select(i => new
                             {
@@ -63,7 +63,7 @@ namespace Ecommerce.Routes
                                 i.ProdutoId,
                                 i.Quantidade,
                                 i.PrecoUnitario,
-                                Produto = new
+                                Produto = i.Produto == null ? null : new
                                 {
                                     i.ProdutoId,
                                     i.Produto.Nome,
@@ -71,7 +71,27 @@ namespace Ecommerce.Routes
                                     i.Produto.Preco
                                 }
                             })
-                        }
+                        },
+                        Pedidos = c.Pedidos.Select(p => new
+                        {
+                            p.Id,
+                            p.DataPedido,
+                            Itens = p.Itens.Select(i => new
+                            {
+                                i.Id,
+                                i.ProdutoId,
+                                i.Quantidade,
+                                i.PrecoUnitario
+                            }),
+                            Fatura = new
+                            {
+                                p.Fatura.Id,
+                                p.Fatura.DataEmissao,
+                                p.Fatura.ValorTotal,
+                                p.Fatura.MeioPagamento,
+                                p.Fatura.Pago
+                            }
+                        })
                     })
                     .FirstOrDefaultAsync();
                 return cliente is null ? Results.NotFound() : Results.Ok(cliente);

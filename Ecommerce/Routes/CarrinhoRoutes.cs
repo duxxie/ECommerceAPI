@@ -53,7 +53,7 @@ namespace Ecommerce.Routes
                             i.PrecoUnitario
                         }),
                         c.ClienteId,
-                        Cliente = new
+                        Cliente = c.Cliente == null ? null : new
                         {
                             c.Cliente.Nome,
                             c.Cliente.Email,

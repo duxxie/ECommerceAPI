@@ -14,7 +14,7 @@ namespace Ecommerce.Routes
                 await db.Produtos.ToListAsync());
 
             group.MapGet("/{id:int}", async (int id, AppDbContext db) =>
-                await db.Produtos.FindAsync(id) is Produto p ? Results.Ok(p) : Results.NotFound());
+                await db.Produtos.FindAsync(id) is Produto p ? Results.Ok(p) : Results.NotFound("Produto não encontrado."));
 
             group.MapPost("/", async (Produto produto, AppDbContext db) =>
             {

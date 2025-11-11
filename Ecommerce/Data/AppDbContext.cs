@@ -19,7 +19,6 @@ namespace Ecommerce.Data
         // ------------------ Configurações de relacionamento ------------------
          protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            //base.OnModelCreating(modelBuilder);
 
             //------------------ Carrinho ------------------
             modelBuilder.Entity<Carrinho>()

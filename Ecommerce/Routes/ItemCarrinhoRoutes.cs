@@ -20,7 +20,7 @@ namespace Ecommerce.Routes
                     i.Quantidade,
                     i.PrecoUnitario,
                     i.ProdutoId,
-                    Produto = new
+                    Produto = i.Produto == null ? null : new
                     {
                         i.Produto.Nome,
                         i.Produto.Preco,
@@ -41,7 +41,7 @@ namespace Ecommerce.Routes
                         i.Quantidade,
                         i.PrecoUnitario,
                         i.ProdutoId,
-                        Produto = new
+                        Produto = i.Produto == null ? null : new
                         {
                             i.Produto.Nome,
                             i.Produto.Descricao,
@@ -56,6 +56,12 @@ namespace Ecommerce.Routes
 
             group.MapPost("/", async (ItemCarrinho itemCarrinhoCreate, AppDbContext db) =>
             {
+                var produto = await db.Produtos.FirstOrDefaultAsync(p => p.Id == itemCarrinhoCreate.ProdutoId);
+
+                if (produto is null)
+                    return Results.BadRequest("Produto não encontrado");
+
+                itemCarrinhoCreate.PrecoUnitario = produto.Preco;
                 db.ItensCarrinho.Add(itemCarrinhoCreate);
                 await db.SaveChangesAsync();
                 return Results.Created($"/itemCarrinho/{itemCarrinhoCreate.Id}", itemCarrinhoCreate);
