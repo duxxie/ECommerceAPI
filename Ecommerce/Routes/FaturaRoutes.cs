@@ -18,7 +18,7 @@ namespace Ecommerce.Routes
                         f.Id,
                         f.PedidoId,
                         f.DataEmissao,
-                        f.Pedido.ValorTotal,
+                        f.ValorTotal,
                         f.MeioPagamento,
                         f.Pago
                     })
@@ -33,10 +33,10 @@ namespace Ecommerce.Routes
                     .Select(f => new
                     {
                         f.Id,
-                        Pedido = new
+                        Pedido = f.Pedido == null ? null : new
                         {
                             f.Pedido.Id,
-                            Cliente = new
+                            Cliente = f.Pedido.Cliente == null ? null : new
                             {
                                 f.Pedido.Cliente.Id,
                                 f.Pedido.Cliente.Nome,

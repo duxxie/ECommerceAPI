@@ -1,6 +1,7 @@
 using Ecommerce.Data;
 using Ecommerce.Models;
 using Microsoft.EntityFrameworkCore;
+using BCrypt.Net;
 
 namespace Ecommerce.Routes
 {
@@ -48,7 +49,10 @@ namespace Ecommerce.Routes
                         c.Id,
                         c.Nome,
                         c.Email,
+                        c.Senha,
+                        c.SenhaHash,
                         c.Telefone,
+                        c.Endereco,
                         Carrinho = c.Carrinho == null ? null : new
                         {
                             c.Carrinho.Id,
@@ -83,7 +87,7 @@ namespace Ecommerce.Routes
                                 i.Quantidade,
                                 i.PrecoUnitario
                             }),
-                            Fatura = new
+                            Fatura = p.Fatura == null ? null : new
                             {
                                 p.Fatura.Id,
                                 p.Fatura.DataEmissao,
@@ -94,20 +98,39 @@ namespace Ecommerce.Routes
                         })
                     })
                     .FirstOrDefaultAsync();
-                return cliente is null ? Results.NotFound() : Results.Ok(cliente);
+                return cliente is null ? Results.NotFound("Cliente não encontrado") : Results.Ok(cliente);
             });
 
             group.MapPost("/", async (Cliente cliente, AppDbContext db) =>
             {
+                var senhaHash = BCrypt.Net.BCrypt.HashPassword(cliente.Senha);
+                cliente.SenhaHash = senhaHash;
+
                 db.Clientes.Add(cliente);
                 await db.SaveChangesAsync();
                 return Results.Created($"/clientes/{cliente.Id}", cliente);
             });
 
+            group.MapPut("/{id:int}", async (int id, Cliente clienteAtualizado, AppDbContext db) =>
+            {
+                var cliente = await db.Clientes.FirstOrDefaultAsync(c => c.Id == id);
+                if (cliente is null)
+                    return Results.NotFound("Cliente não encontrado");
+
+                cliente.Nome = clienteAtualizado.Nome;
+                cliente.Email = clienteAtualizado.Email;
+                cliente.Telefone = clienteAtualizado.Telefone;
+                cliente.Endereco = clienteAtualizado.Endereco;
+
+                await db.SaveChangesAsync();
+                return Results.Ok(cliente);
+            }); 
+
+
             group.MapDelete("/{id:int}", async (int id, AppDbContext db) =>
             {
                 var cliente = await db.Clientes.FindAsync(id);
-                if (cliente is null) return Results.NotFound();
+                if (cliente is null) return Results.NotFound("Cliente não encontrado");
 
                 db.Clientes.Remove(cliente);
                 await db.SaveChangesAsync();

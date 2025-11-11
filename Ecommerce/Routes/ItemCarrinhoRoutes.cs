@@ -61,6 +61,9 @@ namespace Ecommerce.Routes
                 if (produto is null)
                     return Results.BadRequest("Produto não encontrado");
 
+                if (produto.Estoque < itemCarrinhoCreate.Quantidade)
+                    return Results.BadRequest("Sem estoque");
+                    
                 itemCarrinhoCreate.PrecoUnitario = produto.Preco;
                 db.ItensCarrinho.Add(itemCarrinhoCreate);
                 await db.SaveChangesAsync();
