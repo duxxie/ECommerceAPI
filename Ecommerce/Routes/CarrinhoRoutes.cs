@@ -1,6 +1,5 @@
 using Ecommerce.Data;
 using Ecommerce.Models;
-using Ecommerce.DTOs;
 using Microsoft.EntityFrameworkCore;
 
 namespace Ecommerce.Routes
