@@ -1,5 +1,4 @@
 using Ecommerce.Data;
-using Ecommerce.DTOs;
 using Ecommerce.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -41,13 +40,15 @@ namespace Ecommerce.Routes
                     .Select(p => new
                     {
                         p.Id,
-                        Pedido = p.DataPedido,
+                        p.DataPedido,
                         p.StatusEntrega,
                         p.ValorTotal,
                         Itens = p.Itens.Select(i => new
                         {
                             i.Id,
                             i.ProdutoId,
+                            i.Produto!.Nome,
+                            i.Produto.Descricao,
                             i.Quantidade,
                             i.PrecoUnitario
                         }),
@@ -94,7 +95,7 @@ namespace Ecommerce.Routes
 
                 foreach (var i in carrinho.Itens)
                 {
-                    if(i.Produto != null)
+                    if (i.Produto != null)
                     {
                         if (i.Produto.Estoque < i.Quantidade)
                         {
@@ -108,7 +109,36 @@ namespace Ecommerce.Routes
                 db.Pedidos.Add(pedido);
                 await db.SaveChangesAsync();
 
-                return Results.Created($"/pedidos/{pedido.Id}", new { pedido.Id });
+                var pedidoRead = await db.Pedidos
+                    .AsNoTracking()
+                    .Where(p => p.Id == pedido.Id)
+                    .Select(p => new
+                    {
+                        p.Id,
+                        p.DataPedido,
+                        p.StatusEntrega,
+                        p.ValorTotal,
+                        Itens = p.Itens.Select(i => new
+                        {
+                            i.Id,
+                            i.ProdutoId,
+                            i.Produto!.Nome,
+                            i.Produto.Descricao,
+                            i.Quantidade,
+                            i.PrecoUnitario
+                        }),
+                        Cliente = p.Cliente == null ? null : new
+                        {
+                            p.ClienteId,
+                            p.Cliente.Nome,
+                            p.Cliente.Email,
+                            p.Cliente.Telefone,
+                            p.Cliente.Endereco
+                        }
+                    })
+                    .FirstAsync();
+
+                return Results.Created($"/pedidos/{pedido.Id}", pedidoRead);
             });
 
             // DELETE /pedidos/{id}

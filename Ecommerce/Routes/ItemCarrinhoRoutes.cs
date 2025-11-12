@@ -61,13 +61,56 @@ namespace Ecommerce.Routes
                 if (produto is null)
                     return Results.BadRequest("Produto não encontrado");
 
-                if (produto.Estoque < itemCarrinhoCreate.Quantidade)
-                    return Results.BadRequest("Sem estoque");
-                    
                 itemCarrinhoCreate.PrecoUnitario = produto.Preco;
                 db.ItensCarrinho.Add(itemCarrinhoCreate);
                 await db.SaveChangesAsync();
                 return Results.Created($"/itemCarrinho/{itemCarrinhoCreate.Id}", itemCarrinhoCreate);
+            });
+
+            group.MapPut("/{id:int}", async (int id, ItemCarrinho itemCarrinhoAtualizado, AppDbContext db) =>
+            {
+                var itemCarrinho = await db.ItensCarrinho.FirstOrDefaultAsync(i => i.Id == id);
+
+                if (itemCarrinho is null)
+                    return Results.NotFound("Item carrinho não encontrado");
+
+                itemCarrinho.Quantidade = itemCarrinhoAtualizado.Quantidade;
+
+                await db.SaveChangesAsync();
+
+                var itemCarrinhoQuery = await db.ItensCarrinho
+                    .AsNoTracking()
+                    .Where(i => i.Id == id)
+                    .Select(i => new
+                    {
+                        i.Id,
+                        i.CarrinhoId,
+                        i.Quantidade,
+                        i.PrecoUnitario,
+                        i.ProdutoId,
+                        Produto = new
+                        {
+                            i.Produto!.Nome,
+                            i.Produto.Descricao,
+                            i.Produto.Categoria,
+                            i.Produto.Estoque
+                        }
+                    })
+                    .FirstAsync();
+
+                return Results.Ok(itemCarrinhoQuery);
+            });
+
+            group.MapDelete("/{id:int}", async (int id, AppDbContext db) =>
+            {
+                var itemCarrinho = await db.ItensCarrinho.FirstOrDefaultAsync(i => i.Id == id);
+
+                if (itemCarrinho is null)
+                    return Results.NotFound("Item carrinho não encontrado");
+
+                db.ItensCarrinho.Remove(itemCarrinho);
+                await db.SaveChangesAsync();
+                return Results.Ok("Item carrinho removido com sucesso");
             });
 
         }
