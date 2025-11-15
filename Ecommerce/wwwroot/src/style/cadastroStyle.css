@@ -1,0 +1,113 @@
+
+.app-shell-cadastro {
+    max-width: 1200px;
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1px solid #e5e7f0;
+    padding: 24px 24px 18px;
+}
+
+.main-cadastro {
+    padding: 24px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Cabeçalho */
+
+.app-header-cadastro {
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.app-header-actions-cadastro {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+/* Card de formulário */
+
+.form-card {
+    border-radius: 14px;
+    border: 1px solid var(--border-subtle);
+    background: #ffffff;
+    padding: 16px 16px 14px;
+    margin-bottom: 12px;
+}
+
+.form-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.form-card-header h2 {
+    font-size: 0.98rem;
+    font-weight: 600;
+}
+
+.form-card-header span {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.field-group {
+    margin-bottom: 10px;
+}
+
+.field-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.field-label span {
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.field-label small {
+    font-size: 0.74rem;
+    color: var(--text-muted);
+}
+
+.field-row {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+}
+
+.helper-text {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* Rodapé */
+
+.footer-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-top: 18px;
+    padding-top: 10px;
+    border-top: 1px solid #e5e7f0;
+}
+
+.footer-actions-left,
+.footer-actions-right {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
