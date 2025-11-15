@@ -1,73 +1,104 @@
-const API = "http://localhost:5039/produtos";
+const API_CARRINHO = "http://localhost:5039/carrinhos";
+const API_PRODUTO = "http://localhost:5039/produtos";
 
-async function carregarProduto() {
-    const resposta = await fetch(API);
-    const produto = await resposta.json();
-    mostrarProduto(produto);
+async function carregarCarrinho(idCarrinho) {
+    try {
+        const resp = await fetch(`${API_CARRINHO}/${idCarrinho}`);
+
+        if (!resp.ok) {
+            console.error("Erro ao buscar carrinho:", resp.status);
+            return;
+        }
+
+        const carrinho = await resp.json();
+
+        // Buscar produtos relacionados
+        const itensCompletos = await Promise.all(
+            carrinho.itens.map(async (item) => {
+                const respProduto = await fetch(`${API_PRODUTO}/${item.produtoId}`);
+                const produto = respProduto.ok ? await respProduto.json() : null;
+
+                return {
+                    ...item,
+                    produto
+                };
+            })
+        );
+
+        mostrarItensCarrinho(itensCompletos);
+        atualizarResumo(carrinho, itensCompletos);
+
+    } catch (erro) {
+        console.error("Erro de conexão:", erro);
+    }
 }
 
-function mostrarProduto(produto) {
-    const tabela = document.getElementById("tabelaProduto");
+function mostrarItensCarrinho(itens) {
+    const tabela = document.getElementById("tabelaitemCarrinho");
+
+    if (!tabela) {
+        console.error("Elemento #tabelaitemCarrinho não encontrado!");
+        return;
+    }
+
     tabela.innerHTML = "";
-    produto.forEach(produto => {
-    const linha = document.createElement("div");
-    
-    const real = produto.preco.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-    });
-    
-    linha.classList.add("cart-item-wrapper");
-      linha.innerHTML = `
+
+    itens.forEach(item => {
+        const produto = item.produto ?? {};
+
+        const precoUnit = item.precoUnitario.toLocaleString("pt-BR", {
+            style: "currency", currency: "BRL"
+        });
+
+        const linha = document.createElement("div");
+
+        linha.innerHTML = `
         <article class="cart-item">
-          <div class="cart-item-info">
-            <div class="product-name">${produto.nome}</div>
-            <div class="product-code">Id ${produto.id} • Categoria: ${produto.categoria}</div>
-            <div class="product-meta">${produto.descricao}</div>
-            <span class="badge">${produto.estoque}</span>
-          </div>
-
-          <div class="price-col">
-            <small>Preço unitário</small>
-            <strong>${real}</strong>
-          </div>
-
-          <div class="qty-col">
-            <div class="qty-label">Quantidade</div>
-            <div class="qty-control">
-              <button class="qty-btn">−</button>
-              <span class="qty-value">${produto.estoque}</span>
-              <button class="qty-btn">+</button>
+            <div class="cart-item-info">
+                <div class="product-name">${produto.nome ?? "Produto não encontrado"}</div>
+                <div class="product-code">Id ${item.id} • ProdutoId: ${item.produtoId}</div>
+                <div class="product-meta">${produto.descricao ?? ""}</div>
+                <span class="badge">${produto.categoria ?? ""}</span>
             </div>
-          </div>
 
-          <button class="remove-btn" aria-label="Remover item">&times;</button>
+            <div class="price-col">
+                <small>Preço unitário</small>
+                <strong>${precoUnit}</strong>
+            </div>
+
+            <div class="qty-col">
+                <div class="qty-label">Quantidade</div>
+                <div class="qty-control">
+                    <button class="qty-btn">−</button>
+                    <span class="qty-value">${item.quantidade}</span>
+                    <button class="qty-btn">+</button>
+                </div>
+            </div>
+
+            <button class="remove-btn">&times;</button>
         </article>
-      `;
-      tabela.appendChild(linha);
+        `;
+
+        tabela.appendChild(linha);
     });
-    atualizarResumo(produto);
-  }
-
-function atualizarResumo(produtos) {
-    // quantidade de itens
-    const qtd = produtos.length;
-
-    document.getElementById("qtdCarrinho").textContent = qtd;
-    document.getElementById("qtdProdutosLista").textContent = `${qtd} produtos`;
-
-    // somar valores
-    let subtotal = 0;
-    produtos.forEach(p => subtotal += p.preco * p.estoque);
-
-    // formatar moeda
-    const fmt = subtotal.toLocaleString("pt-BR", {
-        style: "currency",
-        currency: "BRL"
-    });
-
-    document.getElementById("subtotalFinal").textContent = fmt;
-    document.getElementById("totalFinal").textContent = fmt;
 }
 
-  carregarProduto();
+function atualizarResumo(carrinho, itens) {
+
+    document.getElementById("qtdCarrinho").textContent = itens.length;
+    document.getElementById("qtdProdutosLista").textContent = `${itens.length} produtos`;
+
+    let total = 0;
+    itens.forEach(item => total += item.precoUnitario * item.quantidade);
+
+    const totalFmt = total.toLocaleString("pt-BR", {
+        style: "currency",
+        currency: "BRL"
+    });
+
+    document.getElementById("subtotalFinal").textContent = totalFmt;
+    document.getElementById("totalFinal").textContent = totalFmt;
+}
+
+// Carregar automaticamente o carrinho ID=17
+carregarCarrinho(17);
