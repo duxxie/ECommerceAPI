@@ -1,35 +1,31 @@
 const API = 'http://localhost:5039';
 
 async function carregarProdutos() {
-
-    const resposta = await fetch(`${API}/produtos`);
-    const produtos = await resposta.json();
-    return produtos
+  const resposta = await fetch(`${API}/produtos`);
+  const produtos = await resposta.json();
+  return produtos;
 }
 
-async function mostrarProdutos() {
-    const itens = await carregarProdutos();
+import { home } from "./pages/home.js";
+import { cadastro } from "./pages/cadastro.js";
+import { getNavegacaoState } from "./helpers/stateNavegacao.js";
+import { login } from "./pages/login.js";
 
-    const frag = document.createDocumentFragment();
+export async function render() {
+    let root = document.getElementById('root');
+    const produtos = await carregarProdutos()
+    const navegacao = getNavegacaoState();
 
-    itens.forEach(item => {
-        const paragrafo = document.createElement('p');
-        paragrafo.dataset.id = item.id;
-        paragrafo.innerHTML = `
-            Nome: ${item.nome};<br>
-            Descrição: ${item.descricao};<br>
-            Preco: ${item.preco};<br>
-            Estoque: ${item.estoque};<br>
-            Categoria: ${item.categoria};
-        `;
-        frag.appendChild(paragrafo);
-    });
-
-    return frag
+    if(navegacao == "home" || navegacao.length == 0) {
+      home(root, produtos);
+    }
+    else if(navegacao == "cadastro") {
+      cadastro(root);
+    }
+    else if(navegacao == "login") {
+      login(root)
+    }
+    //cadastro(root)
 }
 
-document.addEventListener('DOMContentLoaded', async () => {
-    const root = document.getElementById('root');
-    const conteudo = await mostrarProdutos();
-    root.appendChild(conteudo);
-})
+render();
