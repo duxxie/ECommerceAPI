@@ -47,6 +47,7 @@ app.MapCarrinhoRoutes();
 app.MapItemCarrinhoRoutes();
 app.MapPedidoRoutes();
 app.MapFaturaRoutes();
+app.MapPosLogin();
 
 // ------------------ Seed do banco ------------------
 using (var scope = app.Services.CreateScope())

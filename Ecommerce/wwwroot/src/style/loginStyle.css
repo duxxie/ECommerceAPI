@@ -219,6 +219,22 @@ input:focus {
     text-decoration: underline;
 }
 
+.caixa-erro {
+    
+}
+
+.msg-erro{
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 500;
+    background-color: #fee2e2;
+    color: #b91c1c;
+    width: fit-content;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
 @media (max-width: 480px) {
     body {
     padding: 12px;

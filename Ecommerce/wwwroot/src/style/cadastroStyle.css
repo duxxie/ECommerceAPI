@@ -111,3 +111,26 @@
     gap: 10px;
     flex-wrap: wrap;
 }
+
+.msg-cadastro {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+    border: 1px solid #e5e7f0;
+    padding: 24px 24px 18px;
+}
+
+.msg-sucess {
+    font-size: 1.2em;
+}
+
+.msg-info {
+    margin-top: 5px;
+    text-align: center;
+    color: #6b7280;
+}
+
+.caixa-voltar {
+    text-align: center;
+    margin-top: 30px;
+}
