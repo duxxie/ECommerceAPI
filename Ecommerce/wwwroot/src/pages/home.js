@@ -64,7 +64,7 @@ async function mostrarSumario(totalProdutos, totalProdutosCategoria, totalEstoqu
           <span>${totalProdutosCategoria}</span>
           <small>itens ativos</small>
         </div>
-        <div class="summary-sub">em </div>
+        <div class="summary-sub">em ${nomeCategoria}</div>
       </article>
 
       <article class="summary-card">

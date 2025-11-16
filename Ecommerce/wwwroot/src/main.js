@@ -20,10 +20,10 @@ export async function render() {
       home(root, produtos);
     }
     else if(navegacao == "cadastro") {
-      cadastro(root);
+      cadastro(root, API);
     }
     else if(navegacao == "login") {
-      login(root)
+      login(root, API)
     }
     //cadastro(root)
 }

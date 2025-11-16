@@ -1,13 +1,42 @@
 import { setNavegacaoState } from "../helpers/stateNavegacao.js";
 import { render } from "../main.js";
 
+let cadastroFeito = false
+
 export async function cadastro(root, API) {
     
     root.innerHTML = '';
 
     root.innerHTML = `
-        <div class="main-cadastro">
-            <div class="app-shell-cadastro">
+        <div class="main-cadastro" id="main-cadastro">
+            
+        </div>
+    
+    `
+
+    // handlerActionsCadastro();
+    mostrarFormularioOuMsg(false, API);
+}
+
+async function mostrarFormularioOuMsg(cadastro, API) {
+   const conteudo = document.getElementById('main-cadastro');
+    function mostrar() {
+        if(cadastro) {
+            mostrarBoasVindas(conteudo);
+        }
+        else {
+            mostrarFormulario(conteudo, API)
+        }
+    }
+    mostrar();
+}
+
+async function mostrarFormulario(root, API) {
+
+    root.innerHTML = '';
+
+    root.innerHTML = `
+        <div class="app-shell-cadastro">
                 <header class="app-header-cadastro">
                 <div>
                     <h1 class="h1-header">Cadastro de cliente</h1>
@@ -30,7 +59,7 @@ export async function cadastro(root, API) {
                         <span>Nome completo</span>
                         <small>Como está no documento</small>
                     </div>
-                    <input type="text" placeholder="Digite seu nome completo" />
+                    <input id="nome" type="text" placeholder="Digite seu nome completo" />
                     </div>
 
                     <div class="field-row">
@@ -39,7 +68,7 @@ export async function cadastro(root, API) {
                         <span>E-mail</span>
                         <small>Usado para login e notificações</small>
                         </div>
-                        <input type="email" placeholder="seuemail@exemplo.com" />
+                        <input id="email" type="email" placeholder="seuemail@exemplo.com" />
                     </div>
 
                     <div class="field-group">
@@ -47,7 +76,7 @@ export async function cadastro(root, API) {
                         <span>Telefone</span>
                         <small>WhatsApp de contato</small>
                         </div>
-                        <input type="tel" placeholder="(00) 00000-0000" />
+                        <input id="telefone" type="tel" placeholder="(00) 00000-0000" />
                     </div>
                     </div>
 
@@ -56,7 +85,7 @@ export async function cadastro(root, API) {
                         <span>Senha</span>
                         <small>Mínimo de 8 caracteres</small>
                     </div>
-                    <input type="password" placeholder="Crie uma senha segura" />
+                    <input id="senha" required minlength="8" type="password" placeholder="Crie uma senha segura" />
                     <p class="helper-text">
                         Use letras maiúsculas e minúsculas, números e, se desejar, caracteres especiais.
                     </p>
@@ -74,7 +103,7 @@ export async function cadastro(root, API) {
                         <span>Endereço</span>
                         <small>Rua, número, complemento</small>
                     </div>
-                    <input type="text" placeholder="Ex.: Rua Exemplo, 123 - Apto 45" />
+                    <input id="endereco" type="text" placeholder="Ex.: Rua Exemplo, 123 - Apto 45" />
                     <p class="helper-text">
                         Você poderá cadastrar outros endereços depois, se precisar.
                     </p>
@@ -92,14 +121,12 @@ export async function cadastro(root, API) {
                 </div>
                 </footer>
             </div>
-        </div> 
     `
-
-    handlerActionsCadastro();
+    handlerActionsCadastro(API);
 }
 
-function handlerActionsCadastro() {
-    document.getElementById('actions').addEventListener('click', (e) => {
+async function handlerActionsCadastro(API) {
+    document.getElementById('actions').addEventListener('click', async (e) => {
         const elementoClicado = e.target;
 
         if(elementoClicado.id === "voltar") {
@@ -110,10 +137,74 @@ function handlerActionsCadastro() {
             render();
         }
         else if(elementoClicado.id === "salvar") {
-            console.log("Realizar cadastro");
+            const nome = document.getElementById('nome').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+            const endereco = document.getElementById('endereco').value.trim();
+
+            console.log(`${nome} || ${email} || ${telefone} || ${senha} || ${endereco}`)
+            
+            const newCliente = {nome: nome, email: email, telefone: telefone, senha: senha, endereco: endereco}
+
+            const resposta = await fetch(`${API}/clientes`, {
+                method: "POST",
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(newCliente)
+            });
+
+            const clienteCriado = await resposta.json();
+
+            localStorage.setItem('userLogado', JSON.stringify(clienteCriado));
+
+            mostrarFormularioOuMsg(true);
         } 
         else {
             return;
         }
     })
 }
+
+async function mostrarBoasVindas(root) {
+    const userLogado = JSON.parse(localStorage.getItem('userLogado'));
+    root.innerHTML = `
+        <div class="msg-cadastro">
+            <div class="msg-sucess">
+            Olá ${userLogado.nome}, seu cadastro foi realizado com sucesso !!
+            </div>
+            <div class="msg-info">
+                Clique no botão abaixo para voltar ás compras.
+            </div>
+            <div class="caixa-voltar" id="actions">
+                <button class="btn btn-primary" id="voltar-greeting">Voltar</button>
+            </div>
+        </div>
+    `
+    handlerActionsBoasVindas();
+
+}
+
+async function handlerActionsBoasVindas() {
+    document.getElementById('actions').addEventListener('click', (e) => {
+        const elementoClicado = e.target;
+
+        if(elementoClicado.id === "voltar-greeting") {
+            setNavegacaoState("home");
+            render();
+        }
+    })
+}
+
+{/*<div class="main-cadastro" id="main-cadastro">
+            <div class="msg-cadastro">
+                <div class="msg-sucess">
+                Olá Gustavo, seu cadastro foi realizado com sucesso !!
+                </div>
+                <div class="msg-info">
+                    Clique no botão abaixo para voltar ás compras.
+                </div>
+                <div class="caixa-voltar" id="actions">
+                    <button class="btn btn-primary">Voltar</button>
+                </div>
+            </div>
+        </div> */}

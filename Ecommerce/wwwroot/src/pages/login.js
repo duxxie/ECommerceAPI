@@ -1,7 +1,7 @@
 import { setNavegacaoState } from "../helpers/stateNavegacao.js";
 import { render } from "../main.js";
 
-export function login(root) {
+export function login(root, API) {
     root.innerHTML = ''
 
     root.innerHTML = `
@@ -22,7 +22,7 @@ export function login(root) {
                                 <span>E-mail</span>
                                 <small>O mesmo utilizado no cadastro</small>
                             </div>
-                            <input type="email" placeholder="seuemail@exemplo.com" />
+                            <input id="email" type="email" placeholder="seuemail@exemplo.com" />
                         </div>
 
                         <div class="field-group">
@@ -30,11 +30,13 @@ export function login(root) {
                                 <span>Senha</span>
                                 <small>Mínimo de 8 caracteres</small>
                             </div>
-                            <input type="password" placeholder="Digite sua senha" />
+                            <input id="senha" type="password" placeholder="Digite sua senha" />
                             <div class="helper-row">
                             </div>
                         </div>
 
+                        <div id="msg-erro" class="caixa-erro">
+                        </div>
                         <div id="opcoes"> 
                             <button class="btn btn-primary primary-max-width" id="entrar">Entrar</button>
                             <button class="btn btn-secondary secondary-max-width" id="voltar">Voltar para a loja</button>
@@ -49,15 +51,57 @@ export function login(root) {
             </div>
         </div>
     `
-    handlerOpcoes();
+    handlerOpcoes(API);
 }
 
-function handlerOpcoes() {
-    document.getElementById('opcoes').addEventListener('click', (e) => {
+function handlerOpcoes(API) {
+    document.getElementById('opcoes').addEventListener('click', async (e) => {
         const elementoClicado = e.target
-
+        const caixaMsgErro = document.getElementById('msg-erro');
+    
         if(elementoClicado.id === "entrar") {
-            console.log("Efetivar login");
+            const email = document.getElementById('email').value.trim();
+            const senha = document.getElementById('senha').value.trim();
+
+            if(!email || !senha) {
+                caixaMsgErro.innerHTML = `
+                    <div class="msg-erro">
+                    ${mensagemErro("E-mail ou senha inválidos.")}
+                    </div>
+                `
+                return;
+            }
+            console.log(`Tamanho senha => ${senha.length}`)
+            if(senha.length < 8) {
+                caixaMsgErro.innerHTML = `
+                    <div class="msg-erro">
+                    ${mensagemErro("E-mail ou senha inválidos.")}
+                    </div>
+                `
+                return
+            }
+            const resposta = await fetch(`${API}/login`, {
+                method: "POST",
+                headers: {"Content-Type" : "application/json"},
+                body: JSON.stringify({email, senha})
+            });
+
+            if(!resposta.ok) {
+                console.log("Entrou no erro do ok")
+                 caixaMsgErro.innerHTML = `
+                    <div class="msg-erro">
+                    ${mensagemErro("E-mail ou senha inválidos.")}
+                    </div>
+                `
+                return
+            }
+            
+            const clienteLogado = await resposta.json();
+
+            localStorage.setItem('userLogado', JSON.stringify(clienteLogado));
+
+            setNavegacaoState('home');
+            render();
         }
         else if( elementoClicado.id === "voltar") {
             setNavegacaoState("home");
@@ -72,4 +116,8 @@ function handlerOpcoes() {
         setNavegacaoState("cadastro");
         render();
     })
+}
+
+function mensagemErro(mensagem) {
+    return `⚠️ ${mensagem}`;
 }
