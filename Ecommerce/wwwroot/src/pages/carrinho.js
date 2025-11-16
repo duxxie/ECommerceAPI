@@ -362,7 +362,8 @@ function handlerActionsCarrinho() {
             case "finalizarCompraHeader":
             case "finalizarCompraResumo":
             case "irPagamento":
-                alert("Funcionalidade de pagamento em desenvolvimento!");
+                setNavegacaoState("checkout"); // ← MUDEI PARA CHECKOUT
+                render();
                 break;
                 
             case "limparCarrinho":
