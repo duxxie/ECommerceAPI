@@ -10,20 +10,25 @@ import { home } from "./pages/home.js";
 import { cadastro } from "./pages/cadastro.js";
 import { getNavegacaoState } from "./helpers/stateNavegacao.js";
 import { login } from "./pages/login.js";
+import { perfil } from "./pages/perfil.js";
 
 export async function render() {
     let root = document.getElementById('root');
     const produtos = await carregarProdutos()
     const navegacao = getNavegacaoState();
+    console.log("Navegaçao =>> ", navegacao)
 
-    if(navegacao == "home" || navegacao.length == 0) {
+    if(navegacao === "home" || navegacao.length === 0) {
       home(root, produtos);
     }
-    else if(navegacao == "cadastro") {
+    else if(navegacao === "cadastro") {
       cadastro(root, API);
     }
-    else if(navegacao == "login") {
+    else if(navegacao === "login") {
       login(root, API)
+    }
+    else if(navegacao === "perfil") {
+      perfil(root);
     }
     //cadastro(root)
 }

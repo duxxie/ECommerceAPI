@@ -1,8 +1,6 @@
 import { setNavegacaoState } from "../helpers/stateNavegacao.js";
 import { render } from "../main.js";
 
-let cadastroFeito = false
-
 export async function cadastro(root, API) {
     
     root.innerHTML = '';
