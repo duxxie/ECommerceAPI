@@ -53,7 +53,7 @@
       margin-bottom: 15px;
       display: flex;
       flex-direction: row;
-      justify-content: space-evenly;
+      justify-content: space-between;
       align-items: center;
     }
 
@@ -363,28 +363,79 @@
       transform: translateY(-1px);
     }
 
-    .btn-ghost:disabled {
-      opacity: 0.5;
-      cursor: default;
-      transform: none;
-    }
-
     /* AÇÕES INFERIORES */
 
     .header-actions {
       display: flex;
-      gap: 15px;
+      gap: 20px;
       flex-wrap: wrap;
     }
 
     .busca-style {
       display: flex;
       align-items: center;
-      min-width: 400px;
+      min-width: 500px;
     }
 
     .busca-style label {
       min-width: 110px;
+    }
+
+    .btn-disable {
+      opacity: 0.5;
+      cursor: not-allowed;
+      pointer-events: none;
+      box-shadow: none;
+      background-color: #e5e7eb;  
+      border-color: #d1d5db;
+    }
+
+    .btn-cart {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      position: relative;
+    }
+
+    .cart-badge {
+      min-width: 1.4rem;
+      height: 1.4rem;
+      border-radius: 999px;
+      padding: 0 0.3rem;
+      font-size: 0.75rem;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #2563eb;
+      color: #fff;
+    }
+    
+    .btn-outline:hover .cart-badge{
+      background-color: #fff;
+      color: #2563eb;
+    }
+
+
+    .btn-profile {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;        /* espaço entre ícone e texto */
+    } 
+
+    .icon-profile {
+      width: 20px;
+      height: 20px;
+      display: inline-flex;
+      color: #2563eb;
+    }
+
+    .span-no-click {
+      pointer-events: none;
+    }
+
+    .icon-profile svg {
+      width: 100%;
+      height: 100%;
     }
 
     /* .btn-outline {
@@ -418,9 +469,6 @@
     /* RESPONSIVIDADE */
 
     @media (max-width: 720px) {
-      .app-shell {
-        padding: 16px 14px 14px;
-      }
 
       .filter-actions {
         justify-content: flex-start;

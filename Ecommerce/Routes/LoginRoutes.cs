@@ -23,10 +23,15 @@ namespace Ecommerce.Routes
                 if(!senhaOk)
                     return Results.Unauthorized();
 
+                var primeiroNome = cliente.Nome
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .FirstOrDefault() ?? string.Empty;
+
                 var clienteResposta = new
                 {
                     cliente.Id,
                     cliente.Nome,
+                    PrimeiroNome = primeiroNome,
                     cliente.Email,
                     cliente.Telefone,
                     cliente.Endereco

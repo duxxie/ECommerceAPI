@@ -1,6 +1,9 @@
 import { formatarMoeda } from "../helpers/formatMoeda.js";
 import { setNavegacaoState } from "../helpers/stateNavegacao.js";
 import { render } from "../main.js";
+
+
+
 // const API = 'http://localhost:5039';
 
 
@@ -10,7 +13,7 @@ import { render } from "../main.js";
 //   return produtos;
 // }
 
-async function mostrarProdutos(produtos) {
+async function mostrarProdutos(produtos, usuarioLogado) {
   console.log(produtos)
   const produtosArrString = produtos.map(produto => 
     `
@@ -33,7 +36,7 @@ async function mostrarProdutos(produtos) {
           <div class="stock-soft">Estoque: ${produto.estoque} unidades</div>
         </div>
         <div class="product-card-footer">
-            <button class="btn-ghost">
+            <button class="${usuarioLogado ? "btn-ghost" : "btn-ghost btn-disable"}">
               Adicionar ao carrinho
             </button>
         </div>
@@ -101,6 +104,8 @@ const categorias = ['Notebooks', 'Smartphones', 'Periféricos', 'Acessórios','�
 
 export async function home(root, produtos) {
 
+  const usuario = JSON.parse(localStorage.getItem('userLogado'));
+  const usuarioLogado = usuario !== null;
   // const listProdutos = await carregarProdutos();
   root.innerHTML = '';
 
@@ -116,9 +121,40 @@ export async function home(root, produtos) {
         </div>
       </div>
       <div class="header-actions" id="actions">
-        <button class="btn btn-primary" id="login">Fazer login</button>
-        <button class="btn-outline" id="carrinho">Ver carrinho (7)</button>
-        <button class="btn-outline btn-outline-strong" id="fim-compra">Finalizar compra</button>
+        <button class="${usuarioLogado ? 'btn btn-primary btn-disable' : 'btn btn-primary'}" id="login">Fazer login</button>
+
+        <button id="perfil" class="${usuarioLogado ? 'btn-outline btn-profile' : "btn-outline btn-profile btn-disable"}">
+          <span class="icon-profile span-no-click" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <circle
+                cx="12"
+                cy="8"
+                r="4"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              />
+              <path
+                d="M4 20c0-3.5 4-5.5 8-5.5s8 2 8 5.5"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              />
+            </svg>
+          </span>
+          <span class="span-no-click">${usuarioLogado ? usuario.primeiroNome : 'User'}</span>
+        </button>
+       
+        <button class="btn-cart ${usuarioLogado ? "btn-outline" : "btn-outline btn-disable"}" id="carrinho">
+          <span class="icon-cart" aria-hidden="true">
+            🛒
+          </span>
+          <span>Carrinho</span>
+          <span class="cart-badge" id="cart-quant">7</span>
+        </button>
+        <button class="${usuarioLogado ? "btn-outline btn-outline-strong" : "btn-outline btn-outline-strong btn-disable"}" id="fim-compra">Finalizar compra</button>
       </div>
     </header>
 
@@ -173,7 +209,7 @@ export async function home(root, produtos) {
   </div>
   `;
 
-  handlerListaProdutos(produtos);
+  handlerListaProdutos(produtos, usuarioLogado);
   handlerActions()
 }
 
@@ -191,6 +227,10 @@ function handlerActions() {
     else if(elementoClicado.id === "fim-compra") {
       console.log("clicou em finalizar compra!!");
     }
+    else if(elementoClicado.id === "perfil") {
+      setNavegacaoState('perfil')
+      render()
+    }
     else {
       return;
     }
@@ -198,7 +238,7 @@ function handlerActions() {
   });
 }
 
-async function handlerListaProdutos(produtos) {
+async function handlerListaProdutos(produtos, usuarioLogado) {
   const selectCategoria = document.getElementById('categoria');
   const containerProdutos = document.getElementById('produtos');
   const selecPreco = document.getElementById('preco');
@@ -270,7 +310,7 @@ async function handlerListaProdutos(produtos) {
     const nomeCategoria = categoriaSelect ? categoriaSelect : 'todas as categorias'
 
     sumario.innerHTML = await mostrarSumario(produtos.length, totalProdutosCategoria, totalEstoque, totalEstoqueCategoria, nomeCategoria);
-    containerProdutos.innerHTML = await mostrarProdutos(produtosBuscaComInput);
+    containerProdutos.innerHTML = await mostrarProdutos(produtosBuscaComInput, usuarioLogado);
   }
 
   mostrarProdutosFiltrados();

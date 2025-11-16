@@ -49,8 +49,6 @@ namespace Ecommerce.Routes
                         c.Id,
                         c.Nome,
                         c.Email,
-                        c.Senha,
-                        c.SenhaHash,
                         c.Telefone,
                         c.Endereco,
                         Carrinho = c.Carrinho == null ? null : new
@@ -108,7 +106,22 @@ namespace Ecommerce.Routes
 
                 db.Clientes.Add(cliente);
                 await db.SaveChangesAsync();
-                return Results.Created($"/clientes/{cliente.Id}", cliente);
+
+                var primeiroNome = cliente.Nome
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .FirstOrDefault() ?? string.Empty;
+
+                var clienteRead = new
+                {
+                    cliente.Id,
+                    cliente.Nome,
+                    PrimeiroNome = primeiroNome,
+                    cliente.Email,
+                    cliente.Telefone,
+                    cliente.Endereco
+                };
+
+                return Results.Created($"/clientes/{cliente.Id}", clienteRead);
             });
 
             group.MapPut("/{id:int}", async (int id, Cliente clienteAtualizado, AppDbContext db) =>
