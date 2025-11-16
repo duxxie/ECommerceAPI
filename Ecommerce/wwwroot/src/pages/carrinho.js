@@ -352,15 +352,15 @@ function handlerActionsCarrinho() {
         const elementoClicado = e.target;
 
         switch(elementoClicado.id) {
-            case "continuarComprandoHeader": break;
-            case "continuarComprandoResumo": break;
+            case "continuarComprandoHeader":
+            case "continuarComprandoResumo":
             case "voltarProdutos":
                 setNavegacaoState("home");
                 render();
                 break;
                 
-            case "finalizarCompraHeader": break;
-            case "finalizarCompraResumo": break;
+            case "finalizarCompraHeader":
+            case "finalizarCompraResumo":
             case "irPagamento":
                 alert("Funcionalidade de pagamento em desenvolvimento!");
                 break;
