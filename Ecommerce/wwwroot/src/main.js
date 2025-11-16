@@ -11,6 +11,7 @@ import { cadastro } from "./pages/cadastro.js";
 import { getNavegacaoState } from "./helpers/stateNavegacao.js";
 import { login } from "./pages/login.js";
 import { perfil } from "./pages/perfil.js";
+import { carrinho } from "./pages/carrinho.js"; // ← ADICIONE ESTA IMPORTACAO
 
 export async function render() {
     let root = document.getElementById('root');
@@ -31,6 +32,9 @@ export async function render() {
       perfil(root);
     }
     //cadastro(root)
+    else if(navegacao == "carrinho") { // ← ADICIONE ESTE CASO
+      carrinho(root, API);
+    }
 }
 
 render();
