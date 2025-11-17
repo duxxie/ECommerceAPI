@@ -1,0 +1,715 @@
+<!-- TELA CARRINHO -->
+<!-- <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Carrinho de Compras</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-body: #f3f4f8;
+      --bg-card: #ffffff;
+      --border-subtle: #e5e7eb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --primary: #2563eb;
+      --primary-soft: #e0edff;
+      --badge-green-bg: #dcfce7;
+      --badge-green-text: #15803d;
+      --danger-bg: #fee2e2;
+      --danger-text: #b91c1c;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-pill: 999px;
+      --shadow-card: 0 18px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1120px;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid #e5e7f0;
+      padding: 24px 24px 18px;
+    }
+
+    .app-header {
+      margin-bottom: 24px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .app-header-main h1 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .app-header-main p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .app-header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 9px 18px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+                  box-shadow 0.15s ease, transform 0.05s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: #f9fafb;
+    }
+
+    .btn-outline {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 9px 16px;
+      font-size: 0.82rem;
+      background: #ffffff;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-main);
+      transition: background 0.12s ease, border-color 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      background: #f3f4fb;
+      border-color: #cbd5f5;
+    }
+
+    .btn-outline-strong {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #eef3ff;
+    }
+
+    .btn-outline-strong:hover {
+      background: #e0edff;
+    }
+
+    /* RESUMO SUPERIOR */
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .summary-card {
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: #f9fafb;
+    }
+
+    .summary-title {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .summary-main {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .summary-main span {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .summary-main small {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .summary-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* LISTA DE ITENS DO CARRINHO */
+
+    .cart-wrapper {
+      display: grid;
+      grid-template-columns: minmax(0, 2.3fr) minmax(0, 1fr);
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .cart-items {
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      padding: 14px 16px;
+    }
+
+    .cart-items-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .cart-items-header h2 {
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+
+    .cart-items-header span {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .cart-item {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) 110px 110px 32px;
+      column-gap: 14px;
+      row-gap: 4px;
+      padding: 10px 0;
+      border-top: 1px solid #f1f2f6;
+      align-items: center;
+    }
+
+    .cart-item:first-of-type {
+      border-top: none;
+      padding-top: 6px;
+    }
+
+    .cart-item-info {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .product-name {
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    .product-code {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .product-meta {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 3px 9px;
+      border-radius: var(--radius-pill);
+      font-size: 0.72rem;
+      font-weight: 500;
+      background: var(--badge-green-bg);
+      color: var(--badge-green-text);
+      margin-top: 4px;
+      width: fit-content;
+    }
+
+    .badge-danger {
+      background: var(--danger-bg);
+      color: var(--danger-text);
+    }
+
+    .price-col {
+      font-size: 0.86rem;
+      text-align: right;
+    }
+
+    .price-col strong {
+      font-weight: 600;
+    }
+
+    .price-col small {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .qty-col {
+      text-align: center;
+    }
+
+    .qty-label {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .qty-control {
+      display: inline-flex;
+      align-items: center;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      padding: 2px 4px;
+      background: #f9fafb;
+      gap: 2px;
+    }
+
+    .qty-btn {
+      border: none;
+      background: transparent;
+      padding: 4px 6px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      line-height: 1;
+      color: var(--text-muted);
+    }
+
+    .qty-value {
+      min-width: 24px;
+      text-align: center;
+      font-size: 0.85rem;
+    }
+
+    .remove-btn {
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 1.1rem;
+      padding: 4px;
+    }
+
+    .remove-btn:hover {
+      color: var(--danger-text);
+    }
+
+    /* RESUMO DO PEDIDO */
+
+    .cart-summary {
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      padding: 16px 16px 14px;
+    }
+
+    .cart-summary h2 {
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.86rem;
+      margin-bottom: 6px;
+    }
+
+    .summary-row span {
+      color: var(--text-muted);
+    }
+
+    .summary-row strong {
+      font-weight: 600;
+    }
+
+    .summary-row.total {
+      margin-top: 6px;
+      padding-top: 10px;
+      border-top: 1px dashed #e5e7eb;
+    }
+
+    .summary-row.total span {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .summary-row.total strong {
+      font-size: 1.02rem;
+      color: var(--primary);
+    }
+
+    .summary-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin: 8px 0 10px;
+    }
+
+    .summary-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .summary-actions .btn-primary {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .summary-actions .btn-secondary {
+      width: 100%;
+      justify-content: center;
+    }
+
+    /* RODAPÉ */
+
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 20px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7f0;
+    }
+
+    .footer-actions-left,
+    .footer-actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cart-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 12px;
+      }
+
+      .app-shell {
+        padding: 16px 14px 14px;
+        border-radius: 12px;
+      }
+
+      .app-header {
+        flex-direction: column;
+      }
+
+      .cart-items {
+        padding: 10px 10px;
+      }
+
+      .cart-item {
+        grid-template-columns: minmax(0, 1.8fr);
+        grid-template-rows: auto auto auto;
+        row-gap: 6px;
+      }
+
+      .price-col,
+      .qty-col,
+      .remove-btn {
+        text-align: left;
+      }
+
+      .price-col {
+        margin-top: 4px;
+      }
+
+      .qty-col {
+        justify-self: flex-start;
+      }
+
+      .footer-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+   
+    <header class="app-header">
+      <div class="app-header-main">
+        <h1>Carrinho de compras</h1>
+        <p>Revise os itens selecionados antes de finalizar o pedido.</p>
+      </div>
+      <div class="app-header-actions">
+        <button class="btn-secondary">Continuar comprando</button>
+        <button class="btn-primary">Finalizar compra</button>
+      </div>
+    </header>
+
+  
+    <section class="summary-grid">
+      <article class="summary-card">
+        <div class="summary-title">Itens no carrinho</div>
+        <div class="summary-main">
+          <span>7</span>
+          <small>produtos selecionados</small>
+        </div>
+        <div class="summary-sub">você pode adicionar ou remover itens a qualquer momento</div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-title">Subtotal</div>
+        <div class="summary-main">
+          <span>R$ 4.320,00</span>
+        </div>
+        <div class="summary-sub">valor sem frete e descontos</div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-title">Estoque</div>
+        <div class="summary-main">
+          <span>7</span>
+          <small>itens confirmados</small>
+        </div>
+        <div class="summary-sub">todos os produtos estão disponíveis para envio imediato</div>
+      </article>
+    </section>
+
+    <section class="cart-wrapper">
+     
+      <section class="cart-items" aria-label="Itens do carrinho">
+        <div class="cart-items-header">
+          <h2>Itens selecionados</h2>
+          <span>7 produtos</span>
+        </div>
+
+       
+        <article class="cart-item">
+          <div class="cart-item-info">
+            <div class="product-name">Notebook Pro 14" i7 16GB</div>
+            <div class="product-code">Código: #NTB-014 • Categoria: Notebooks</div>
+            <div class="product-meta">SSD 512GB • Tela Retina • Garantia de 12 meses</div>
+            <span class="badge">Em estoque</span>
+          </div>
+
+          <div class="price-col">
+            <small>Preço unitário</small>
+            <strong>R$ 6.299,00</strong>
+          </div>
+
+          <div class="qty-col">
+            <div class="qty-label">Quantidade</div>
+            <div class="qty-control">
+              <button class="qty-btn">−</button>
+              <span class="qty-value">1</span>
+              <button class="qty-btn">+</button>
+            </div>
+          </div>
+
+          <button class="remove-btn" aria-label="Remover item">&times;</button>
+        </article>
+
+        
+        <article class="cart-item">
+          <div class="cart-item-info">
+            <div class="product-name">Smartphone ZX Max 128GB</div>
+            <div class="product-code">Código: #SPH-221 • Categoria: Smartphones</div>
+            <div class="product-meta">Tela 6.5" • Câmera 64MP • Dual chip</div>
+            <span class="badge">Poucas unidades</span>
+          </div>
+
+          <div class="price-col">
+            <small>Preço unitário</small>
+            <strong>R$ 2.199,00</strong>
+          </div>
+
+          <div class="qty-col">
+            <div class="qty-label">Quantidade</div>
+            <div class="qty-control">
+              <button class="qty-btn">−</button>
+              <span class="qty-value">2</span>
+              <button class="qty-btn">+</button>
+            </div>
+          </div>
+
+          <button class="remove-btn" aria-label="Remover item">&times;</button>
+        </article>
+
+
+        <article class="cart-item">
+          <div class="cart-item-info">
+            <div class="product-name">Headset Gamer Surround</div>
+            <div class="product-code">Código: #HST-087 • Categoria: Periféricos</div>
+            <div class="product-meta">Som 7.1 • RGB • Microfone removível</div>
+            <span class="badge">Em estoque</span>
+          </div>
+
+          <div class="price-col">
+            <small>Preço unitário</small>
+            <strong>R$ 349,90</strong>
+          </div>
+
+          <div class="qty-col">
+            <div class="qty-label">Quantidade</div>
+            <div class="qty-control">
+              <button class="qty-btn">−</button>
+              <span class="qty-value">1</span>
+              <button class="qty-btn">+</button>
+            </div>
+          </div>
+
+          <button class="remove-btn" aria-label="Remover item">&times;</button>
+        </article>
+
+        <article class="cart-item">
+          <div class="cart-item-info">
+            <div class="product-name">Teclado Mecânico Compact</div>
+            <div class="product-code">Código: #TCL-552 • Categoria: Periféricos</div>
+            <div class="product-meta">Layout ABNT2 • Switches Red</div>
+            <span class="badge badge-danger">Últimas unidades</span>
+          </div>
+
+          <div class="price-col">
+            <small>Preço unitário</small>
+            <strong>R$ 489,00</strong>
+          </div>
+
+          <div class="qty-col">
+            <div class="qty-label">Quantidade</div>
+            <div class="qty-control">
+              <button class="qty-btn">−</button>
+              <span class="qty-value">1</span>
+              <button class="qty-btn">+</button>
+            </div>
+          </div>
+
+          <button class="remove-btn" aria-label="Remover item">&times;</button>
+        </article>
+
+        
+        <article class="cart-item">
+          <div class="cart-item-info">
+            <div class="product-name">Carregador Turbo 30W USB-C</div>
+            <div class="product-code">Código: #ACC-301 • Categoria: Acessórios</div>
+            <div class="product-meta">Carregamento rápido • Proteção contra sobrecarga</div>
+            <span class="badge">Em estoque</span>
+          </div>
+
+          <div class="price-col">
+            <small>Preço unitário</small>
+            <strong>R$ 129,90</strong>
+          </div>
+
+          <div class="qty-col">
+            <div class="qty-label">Quantidade</div>
+            <div class="qty-control">
+              <button class="qty-btn">−</button>
+              <span class="qty-value">2</span>
+              <button class="qty-btn">+</button>
+            </div>
+          </div>
+
+          <button class="remove-btn" aria-label="Remover item">&times;</button>
+        </article>
+      </section>
+
+     
+      <aside class="cart-summary" aria-label="Resumo do pedido">
+        <h2>Resumo do pedido</h2>
+
+        <div class="summary-row">
+          <span>Subtotal dos produtos</span>
+          <strong>R$ 4.320,00</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Frete</span>
+          <strong>A calcular</strong>
+        </div>
+
+        <div class="summary-row">
+          <span>Descontos</span>
+          <strong>R$ 0,00</strong>
+        </div>
+
+        <div class="summary-row total">
+          <span>Total estimado</span>
+          <strong>R$ 4.320,00</strong>
+        </div>
+
+        <p class="summary-note">
+          O valor final será confirmado após o cálculo do frete e aplicação de cupons de desconto.
+        </p>
+
+        <div class="summary-actions">
+          <button class="btn btn-primary">Finalizar compra</button>
+          <button class="btn btn-secondary">Continuar comprando</button>
+        </div>
+      </aside>
+    </section>
+
+    
+    <footer class="footer-actions">
+      <div class="footer-actions-left">
+        <button class="btn-outline">Limpar carrinho</button>
+      </div>
+      <div class="footer-actions-right">
+        <button class="btn-outline">Voltar à lista de produtos</button>
+        <button class="btn-outline btn-outline-strong">Ir para pagamento</button>
+      </div>
+    </footer>
+  </div>
+
+</body>
+</html> -->

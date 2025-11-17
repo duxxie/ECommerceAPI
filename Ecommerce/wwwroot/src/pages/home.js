@@ -1,6 +1,6 @@
 import { formatarMoeda } from "../helpers/formatMoeda.js";
 import { setNavegacaoState } from "../helpers/stateNavegacao.js";
-import { render } from "../main.js";
+import { API, render } from "../main.js";
 
 
 
@@ -49,7 +49,7 @@ async function mostrarProdutos(produtos, usuarioLogado) {
   return produtos.length > 0 ? produtosString : `<p>Nenhum produto encontrado...</p>`;
 }
 
-async function mostrarSumario(totalProdutos, totalProdutosCategoria, totalEstoque, totalEstoqueCategoria, nomeCategoria) {
+async function mostrarSumario(totalProdutos, totalProdutosCategoria, totalEstoque, totalEstoqueCategoria, nomeCategoria, quantidadeCarrinho, valorTotalCarrinho) {
 
   return `
       <article class="summary-card">
@@ -91,10 +91,10 @@ async function mostrarSumario(totalProdutos, totalProdutosCategoria, totalEstoqu
       <article class="summary-card">
         <div class="summary-title">No carrinho</div>
         <div class="summary-main">
-          <span>7</span>
+          <span>${quantidadeCarrinho}</span>
           <small>itens selecionados</small>
         </div>
-        <div class="summary-sub">Subtotal aproximado: R$ 4.320,00</div>
+        <div class="summary-sub">Subtotal aproximado: ${formatarMoeda(valorTotalCarrinho)}</div>
       </article>
   `
   
@@ -104,7 +104,7 @@ const categorias = ['Notebooks', 'Smartphones', 'Periféricos', 'Acessórios','�
 
 export async function home(root, produtos) {
 
-  const usuario = JSON.parse(localStorage.getItem('userLogado'));
+  const usuario = JSON.parse(localStorage.getItem('usuarioLogado'));
   const usuarioLogado = usuario !== null;
   // const listProdutos = await carregarProdutos();
   root.innerHTML = '';
@@ -148,11 +148,11 @@ export async function home(root, produtos) {
         </button>
        
         <button class="btn-cart ${usuarioLogado ? "btn-outline" : "btn-outline btn-disable"}" id="carrinho">
-          <span class="icon-cart" aria-hidden="true">
+          <span class="icon-cart span-no-click" aria-hidden="true">
             🛒
           </span>
-          <span>Carrinho</span>
-          <span class="cart-badge" id="cart-quant">7</span>
+          <span class="span-no-click">Carrinho</span>
+          <span class="cart-badge span-no-click" id="cart-quant"></span>
         </button>
         <button class="${usuarioLogado ? "btn-outline btn-outline-strong" : "btn-outline btn-outline-strong btn-disable"}" id="fim-compra">Finalizar compra</button>
       </div>
@@ -222,7 +222,8 @@ function handlerActions() {
       render();
     } 
     else if(elementoClicado.id === "carrinho") {
-      console.log('clicou no ver carrinho!!');
+      setNavegacaoState('carrinho');
+      render();
     }
     else if(elementoClicado.id === "fim-compra") {
       console.log("clicou em finalizar compra!!");
@@ -238,15 +239,24 @@ function handlerActions() {
   });
 }
 
-async function handlerListaProdutos(produtos, usuarioLogado) {
+function carregarCarrinho() {
+  const str = localStorage.getItem('carrinho');
+  return str ? JSON.parse(str) : null;
+}
+
+async function handlerListaProdutos(produtos, usuarioLogado, quantidade = 1) {
+  console.log(produtos)
+  let carrinho = carregarCarrinho()
   const selectCategoria = document.getElementById('categoria');
   const containerProdutos = document.getElementById('produtos');
   const selecPreco = document.getElementById('preco');
   const selectOrdenar = document.getElementById('ordenar');
   const inputBusca = document.getElementById('busca');
   const sumario = document.getElementById('sumario');
+  const quantidadeCarrinho = document.getElementById('cart-quant');
 
   async function mostrarProdutosFiltrados() {
+    const carrinhoInside = carregarCarrinho();
     const categoriaSelect = selectCategoria.value;
     const precoSelec = selecPreco.value;
     const ordemSelec = selectOrdenar.value;
@@ -306,10 +316,31 @@ async function handlerListaProdutos(produtos, usuarioLogado) {
       totalEstoque += p.estoque;
     })
     
+    let valorTotalCarrinho = 0;
+    let quant = 0
+    if(carrinhoInside) {
+      carrinhoInside.itens.forEach(item => {
+      quant += item.quantidade
+
+      const produto = produtos.find(p => Number(p.id) === Number(item.produtoId));
+      console.log(produto)
+      if(!produto) return;
+
+      const preco = produto.preco;
+
+      const subtotal = preco * item.quantidade;
+      console.log(`subtotal => ${subtotal}`)
+      valorTotalCarrinho += subtotal;
+      console.log(`valor total => ${valorTotalCarrinho}`);
+
+    });
+    }
+
+    quantidadeCarrinho.innerHTML = quant
     const totalProdutosCategoria = produtosBuscaComInput.length;
     const nomeCategoria = categoriaSelect ? categoriaSelect : 'todas as categorias'
 
-    sumario.innerHTML = await mostrarSumario(produtos.length, totalProdutosCategoria, totalEstoque, totalEstoqueCategoria, nomeCategoria);
+    sumario.innerHTML = await mostrarSumario(produtos.length, totalProdutosCategoria, totalEstoque, totalEstoqueCategoria, nomeCategoria, quant, valorTotalCarrinho);
     containerProdutos.innerHTML = await mostrarProdutos(produtosBuscaComInput, usuarioLogado);
   }
 
@@ -318,7 +349,61 @@ async function handlerListaProdutos(produtos, usuarioLogado) {
   selectCategoria.addEventListener('change', mostrarProdutosFiltrados);
   selecPreco.addEventListener('change', mostrarProdutosFiltrados);
   selectOrdenar.addEventListener('change', mostrarProdutosFiltrados);
-  inputBusca.addEventListener('input', debounce(mostrarProdutosFiltrados, 250))
+  inputBusca.addEventListener('input', debounce(mostrarProdutosFiltrados, 250));
+  containerProdutos.addEventListener('click', async (e) => {
+    const elementoClicado = e.target;
+
+    if(!elementoClicado.classList.contains('btn-ghost')) {
+      return
+    }
+
+    const card = elementoClicado.closest('.product-card');
+    const idProduto = card.id
+
+    console.log(`Id do card clicado ${idProduto}`);
+
+    const itemExistente = carrinho.itens.find(i => Number(i.produtoId) === Number(idProduto));
+    if(itemExistente) {
+      console.log("O ITEM JÁ EXISTE")
+      const resp = await fetch(`${API}/itemCarrinho/${itemExistente.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ quantidade: itemExistente.quantidade + quantidade })
+      });
+
+      if(!resp.ok) return;
+    } else {
+      console.log("O ITEM NAOOO EXISTE")
+      const respItem = await fetch(`${API}/itemCarrinho`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          carrinhoId: carrinho.id,
+          produtoId: idProduto,
+          quantidade: quantidade
+        })
+      });
+
+      if(!respItem.ok) return;
+      // carrinho.itens.push({
+      //   idProduto,
+      //   quantidade
+      // })
+    }
+
+    const respCarrinho = await fetch(`${API}/carrinhos/${carrinho.id}`);
+
+    if(!respCarrinho) return;
+
+    const carrinhoAtualizado = await respCarrinho.json();
+
+    localStorage.setItem('carrinho', JSON.stringify(carrinhoAtualizado));
+
+    mostrarProdutosFiltrados()
+
+    console.log(carrinho.itens);
+
+    });
 }
 
 function debounce(fn, delay) {

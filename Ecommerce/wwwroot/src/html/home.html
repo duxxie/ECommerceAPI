@@ -1,0 +1,1323 @@
+<!-- TELA PRINCIPAL -->
+<!-- <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Painel do E-commerce</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-body: #f3f4f8;
+      --bg-card: #ffffff;
+      --border-subtle: #e5e7eb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --primary: #2563eb;
+      --primary-soft: #e0edff;
+      --badge-green-bg: #dcfce7;
+      --badge-green-text: #15803d;
+      --badge-yellow-bg: #fef3c7;
+      --badge-yellow-text: #b45309;
+      --badge-gray-bg: #f3f4f6;
+      --badge-gray-text: #4b5563;
+      --danger-bg: #fee2e2;
+      --danger-text: #b91c1c;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-pill: 999px;
+      --shadow-card: 0 18px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1120px;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid #e5e7f0;
+      padding: 24px 24px 18px;
+    }
+
+    .app-header {
+      margin-bottom: 24px;
+    }
+
+    .app-header h1 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .app-header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* FILTROS SUPERIORES */
+
+    .filter-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .filter-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .filter-group select,
+    .filter-group input {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      padding: 10px 12px;
+      font-size: 0.88rem;
+      outline: none;
+      background: #f9fafb;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .filter-group select:focus,
+    .filter-group input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.18);
+      background: #ffffff;
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+                  box-shadow 0.15s ease, transform 0.05s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: #f9fafb;
+    }
+
+    /* CARDS RESUMO */
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .summary-card {
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: #f9fafb;
+    }
+
+    .summary-title {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .summary-main {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .summary-main span {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .summary-main small {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .summary-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* GRID DE PRODUTOS (CARDS) */
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+    }
+
+    .product-card {
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 190px;
+      transition: box-shadow 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 18px 34px rgba(15, 23, 42, 0.12);
+      transform: translateY(-2px);
+      border-color: #d0dbff;
+    }
+
+    .product-card-header {
+      margin-bottom: 8px;
+    }
+
+    .product-name {
+      font-weight: 600;
+      font-size: 0.94rem;
+      margin-bottom: 2px;
+    }
+
+    .product-code {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .product-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .product-meta strong {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .price {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    .price small {
+      display: block;
+      font-weight: 400;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      margin-top: 2px;
+    }
+
+    .stock-soft {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-green {
+      background: var(--badge-green-bg);
+      color: var(--badge-green-text);
+    }
+
+    .badge-yellow {
+      background: var(--badge-yellow-bg);
+      color: var(--badge-yellow-text);
+    }
+
+    .badge-gray {
+      background: var(--badge-gray-bg);
+      color: var(--badge-gray-text);
+    }
+
+    .badge-danger {
+      background: var(--danger-bg);
+      color: var(--danger-text);
+    }
+
+    .product-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-ghost {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      background: #ffffff;
+      cursor: pointer;
+      color: var(--primary);
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background 0.12s ease, border-color 0.12s ease, transform 0.05s ease;
+    }
+
+    .btn-ghost:hover {
+      background: var(--primary-soft);
+      border-color: rgba(37, 99, 235, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost:disabled {
+      opacity: 0.5;
+      cursor: default;
+      transform: none;
+    }
+
+    /* AÇÕES INFERIORES */
+
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7f0;
+    }
+
+    .footer-actions-left,
+    .footer-actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-outline {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 9px 16px;
+      font-size: 0.82rem;
+      background: #ffffff;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-main);
+      transition: background 0.12s ease, border-color 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      background: #f3f4fb;
+      border-color: #cbd5f5;
+    }
+
+    .btn-outline-strong {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #eef3ff;
+    }
+
+    .btn-outline-strong:hover {
+      background: #e0edff;
+    }
+
+    /* RESPONSIVIDADE */
+
+    @media (max-width: 1024px) {
+      .products-grid {
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .filter-bar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .products-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 12px;
+      }
+
+      .app-shell {
+        padding: 16px 14px 14px;
+        border-radius: 12px;
+      }
+
+      .filter-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .products-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-actions {
+        flex-direction: column;
+      }
+
+      .footer-actions-left,
+      .footer-actions-right {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <header class="app-header">
+      <h1>Visualizar Lista de Produtos</h1>
+      <p>Confira os itens disponíveis para venda e o status de estoque em tempo real.</p>
+    </header>
+
+    <section class="filter-bar">
+      <div class="filter-group">
+        <label for="categoria">Categoria</label>
+        <select id="categoria">
+          <option>Todas as categorias</option>
+          <option>Notebooks</option>
+          <option>Smartphones</option>
+          <option>Periféricos</option>
+          <option>Acessórios</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="preco">Faixa de preço</label>
+        <select id="preco">
+          <option>Qualquer valor</option>
+          <option>Até R$ 500,00</option>
+          <option>R$ 500,00 a R$ 2.000,00</option>
+          <option>Acima de R$ 2.000,00</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="ordenar">Ordenar por</label>
+        <select id="ordenar">
+          <option>Mais relevantes</option>
+          <option>Menor preço</option>
+          <option>Maior preço</option>
+          <option>Em destaque</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="busca">Buscar produto</label>
+        <div class="filter-actions">
+          <input id="busca" type="text" placeholder="Nome ou código" />
+          <button class="btn btn-primary">Aplicar filtros</button>
+          <button class="btn btn-secondary">Limpar</button>
+        </div>
+      </div>
+    </section>
+
+
+    <section class="summary-grid">
+      <article class="summary-card">
+        <div class="summary-title">Produtos disponíveis</div>
+        <div class="summary-main">
+          <span>58</span>
+          <small>itens ativos</small>
+        </div>
+        <div class="summary-sub">em 6 categorias cadastradas</div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-title">Itens em estoque</div>
+        <div class="summary-main">
+          <span>41</span>
+          <small>para pronta entrega</small>
+        </div>
+        <div class="summary-sub">atualização em tempo real</div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-title">No carrinho</div>
+        <div class="summary-main">
+          <span>7</span>
+          <small>itens selecionados</small>
+        </div>
+        <div class="summary-sub">Subtotal aproximado: R$ 4.320,00</div>
+      </article>
+    </section>
+
+
+    <section class="products-grid" aria-label="Lista de produtos em cards">
+
+      <article class="product-card">
+        <div>
+          <div class="product-card-header">
+            <div class="product-name">Notebook Pro 14" i7 16GB</div>
+            <div class="product-code">Código: #NTB-014</div>
+          </div>
+          <div class="product-meta">
+            <strong>Categoria:</strong> Notebooks
+          </div>
+          <div class="price">
+            R$ 6.299,00
+            <small>ou 10x de R$ 629,90 sem juros</small>
+          </div>
+          <div class="stock-soft">Estoque: 12 unidades</div>
+        </div>
+        <div class="product-card-footer">
+          <span class="badge badge-green">Em estoque</span>
+          <button class="btn-ghost">Adicionar ao carrinho</button>
+        </div>
+      </article>
+
+
+      <article class="product-card">
+        <div>
+          <div class="product-card-header">
+            <div class="product-name">Smartphone ZX Max 128GB</div>
+            <div class="product-code">Código: #SPH-221</div>
+          </div>
+          <div class="product-meta">
+            <strong>Categoria:</strong> Smartphones
+          </div>
+          <div class="price">
+            R$ 2.199,00
+            <small>no boleto com 5% OFF</small>
+          </div>
+          <div class="stock-soft">Estoque: 4 unidades</div>
+        </div>
+        <div class="product-card-footer">
+          <span class="badge badge-yellow">Poucas unidades</span>
+          <button class="btn-ghost">Adicionar ao carrinho</button>
+        </div>
+      </article>
+
+ 
+      <article class="product-card">
+        <div>
+          <div class="product-card-header">
+            <div class="product-name">Headset Gamer Surround</div>
+            <div class="product-code">Código: #HST-087</div>
+          </div>
+          <div class="product-meta">
+            <strong>Categoria:</strong> Periféricos
+          </div>
+          <div class="price">
+            R$ 349,90
+            <small>som imersivo 7.1 virtual</small>
+          </div>
+          <div class="stock-soft">Estoque: 29 unidades</div>
+        </div>
+        <div class="product-card-footer">
+          <span class="badge badge-green">Em estoque</span>
+          <button class="btn-ghost">Adicionar ao carrinho</button>
+        </div>
+      </article>
+
+ 
+      <article class="product-card">
+        <div>
+          <div class="product-card-header">
+            <div class="product-name">Teclado Mecânico Compact</div>
+            <div class="product-code">Código: #TCL-552</div>
+          </div>
+          <div class="product-meta">
+            <strong>Categoria:</strong> Periféricos
+          </div>
+          <div class="price">
+            R$ 489,00
+            <small>layout ABNT2, switches Red</small>
+          </div>
+          <div class="stock-soft">Estoque: 0 unidade</div>
+        </div>
+        <div class="product-card-footer">
+          <span class="badge badge-danger">Esgotado</span>
+          <button class="btn-ghost" disabled>Indisponível</button>
+        </div>
+      </article>
+
+      
+      <article class="product-card">
+        <div>
+          <div class="product-card-header">
+            <div class="product-name">Carregador Turbo 30W USB-C</div>
+            <div class="product-code">Código: #ACC-301</div>
+          </div>
+          <div class="product-meta">
+            <strong>Categoria:</strong> Acessórios
+          </div>
+          <div class="price">
+            R$ 129,90
+            <small>proteção contra sobrecarga</small>
+          </div>
+          <div class="stock-soft">Estoque: 18 unidades</div>
+        </div>
+        <div class="product-card-footer">
+          <span class="badge badge-gray">Normal</span>
+          <button class="btn-ghost">Adicionar ao carrinho</button>
+        </div>
+      </article>
+
+   
+      <article class="product-card">
+        <div>
+          <div class="product-card-header">
+            <div class="product-name">Mouse Wireless Silent</div>
+            <div class="product-code">Código: #MSE-410</div>
+          </div>
+          <div class="product-meta">
+            <strong>Categoria:</strong> Periféricos
+          </div>
+          <div class="price">
+            R$ 99,90
+            <small>até 18 meses de bateria</small>
+          </div>
+          <div class="stock-soft">Estoque: 35 unidades</div>
+        </div>
+        <div class="product-card-footer">
+          <span class="badge badge-green">Em estoque</span>
+          <button class="btn-ghost">Adicionar ao carrinho</button>
+        </div>
+      </article>
+    </section>
+
+    <footer class="footer-actions">
+      <div class="footer-actions-left">
+        <button class="btn-outline">Filtrar / Ordenar resultados</button>
+        <button class="btn-outline">Exportar lista</button>
+      </div>
+
+      <div class="footer-actions-right">
+        <button class="btn-outline">Ver carrinho (7)</button>
+        <button class="btn-outline btn-outline-strong">Finalizar compra</button>
+      </div>
+    </footer>
+  </div>
+
+</body> 
+</html>-->
+
+<!-- <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Painel do E-commerce</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-body: #f3f4f8;
+      --bg-card: #ffffff;
+      --border-subtle: #e5e7eb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --primary: #2563eb;
+      --primary-soft: #e0edff;
+      --badge-green-bg: #dcfce7;
+      --badge-green-text: #15803d;
+      --badge-yellow-bg: #fef3c7;
+      --badge-yellow-text: #b45309;
+      --badge-gray-bg: #f3f4f6;
+      --badge-gray-text: #4b5563;
+      --danger-bg: #fee2e2;
+      --danger-text: #b91c1c;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-pill: 999px;
+      --shadow-card: 0 18px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      padding: 0;
+    }
+
+    .app-shell {
+      width: 100%;
+      min-height: 100vh;
+      background: var(--bg-card);
+      border-radius: 0; /* ocupa a tela toda */
+      box-shadow: none; /* opcional: sem sombra em tela cheia */
+      border: 1px solid #e5e7f0;
+      padding: 24px 32px 18px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .app-header {
+      margin-bottom: 24px;
+    }
+
+    .app-header h1 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .app-header p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    /* FILTROS SUPERIORES */
+
+    .filter-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .filter-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .filter-group select,
+    .filter-group input {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      padding: 10px 12px;
+      font-size: 0.88rem;
+      outline: none;
+      background: #f9fafb;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .filter-group select:focus,
+    .filter-group input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.18);
+      background: #ffffff;
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .btn {
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+                  box-shadow 0.15s ease, transform 0.05s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: #f9fafb;
+    }
+
+    /* CARDS RESUMO */
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .summary-card {
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: #f9fafb;
+    }
+
+    .summary-title {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .summary-main {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .summary-main span {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .summary-main small {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .summary-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* GRID DE PRODUTOS (CARDS) */
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+      margin-bottom: 18px;
+      flex: 1; /* ajuda a empurrar o footer pro fim da tela */
+    }
+
+    .product-card {
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      padding: 14px 16px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 190px;
+      transition: box-shadow 0.15s ease, transform 0.1s ease, border-color 0.15s ease;
+    }
+
+    .product-card:hover {
+      box-shadow: 0 18px 34px rgba(15, 23, 42, 0.12);
+      transform: translateY(-2px);
+      border-color: #d0dbff;
+    }
+
+    .product-card-header {
+      margin-bottom: 8px;
+    }
+
+    .product-name {
+      font-weight: 600;
+      font-size: 0.94rem;
+      margin-bottom: 2px;
+    }
+
+    .product-code {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .product-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 4px;
+    }
+
+    .product-meta strong {
+      color: var(--text-main);
+      font-weight: 500;
+    }
+
+    .price {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-top: 4px;
+    }
+
+    .price small {
+      display: block;
+      font-weight: 400;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      margin-top: 2px;
+    }
+
+    .stock-soft {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-green {
+      background: var(--badge-green-bg);
+      color: var(--badge-green-text);
+    }
+
+    .badge-yellow {
+      background: var(--badge-yellow-bg);
+      color: var(--badge-yellow-text);
+    }
+
+    .badge-gray {
+      background: var(--badge-gray-bg);
+      color: var(--badge-gray-text);
+    }
+
+    .badge-danger {
+      background: var(--danger-bg);
+      color: var(--danger-text);
+    }
+
+    .product-card-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .btn-ghost {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      background: #ffffff;
+      cursor: pointer;
+      color: var(--primary);
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background 0.12s ease, border-color 0.12s ease, transform 0.05s ease;
+    }
+
+    .btn-ghost:hover {
+      background: var(--primary-soft);
+      border-color: rgba(37, 99, 235, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost:disabled {
+      opacity: 0.5;
+      cursor: default;
+      transform: none;
+    }
+
+    /* AÇÕES INFERIORES */
+
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7f0;
+    }
+
+    .footer-actions-left,
+    .footer-actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .btn-outline {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 9px 16px;
+      font-size: 0.82rem;
+      background: #ffffff;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-main);
+      transition: background 0.12s ease, border-color 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      background: #f3f4fb;
+      border-color: #cbd5f5;
+    }
+
+    .btn-outline-strong {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #eef3ff;
+    }
+
+    .btn-outline-strong:hover {
+      background: #e0edff;
+    }
+
+    /* RESPONSIVIDADE */
+
+    @media (max-width: 1024px) {
+      .filter-bar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .summary-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 720px) {
+      .app-shell {
+        padding: 16px 14px 14px;
+      }
+
+      .filter-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-actions {
+        flex-direction: column;
+      }
+
+      .footer-actions-left,
+      .footer-actions-right {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <header class="app-header">
+      <h1>Visualizar Lista de Produtos</h1>
+      <p>Confira os itens disponíveis para venda e o status de estoque em tempo real.</p>
+    </header>
+
+    <section class="filter-bar">
+      <div class="filter-group">
+        <label for="categoria">Categoria</label>
+        <select id="categoria">
+          <option>Todas as categorias</option>
+          <option>Notebooks</option>
+          <option>Smartphones</option>
+          <option>Periféricos</option>
+          <option>Acessórios</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="preco">Faixa de preço</label>
+        <select id="preco">
+          <option>Qualquer valor</option>
+          <option>Até R$ 500,00</option>
+          <option>R$ 500,00 a R$ 2.000,00</option>
+          <option>Acima de R$ 2.000,00</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="ordenar">Ordenar por</label>
+        <select id="ordenar">
+          <option>Mais relevantes</option>
+          <option>Menor preço</option>
+          <option>Maior preço</option>
+          <option>Em destaque</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="busca">Buscar produto</label>
+        <div class="filter-actions">
+          <input id="busca" type="text" placeholder="Nome ou código" />
+          <button class="btn btn-primary">Aplicar filtros</button>
+          <button class="btn btn-secondary">Limpar</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="summary-grid">
+      <article class="summary-card">
+        <div class="summary-title">Produtos disponíveis</div>
+        <div class="summary-main">
+          <span>58</span>
+          <small>itens ativos</small>
+        </div>
+        <div class="summary-sub">em 6 categorias cadastradas</div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-title">Itens em estoque</div>
+        <div class="summary-main">
+          <span>41</span>
+          <small>para pronta entrega</small>
+        </div>
+        <div class="summary-sub">atualização em tempo real</div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-title">No carrinho</div>
+        <div class="summary-main">
+          <span>7</span>
+          <small>itens selecionados</small>
+        </div>
+        <div class="summary-sub">Subtotal aproximado: R$ 4.320,00</div>
+      </article>
+    </section>
+
+    <section class="products-grid" aria-label="Lista de produtos em cards">
+
+      <article class="product-card">
+        <div>
+          <div class="product-card-header">
+            <div class="product-name">Notebook Pro 14" i7 16GB</div>
+            <div class="product-code">Código: #NTB-014</div>
+          </div>
+          <div class="product-meta">
+            <strong>Categoria:</strong> Notebooks
+          </div>
+          <div class="price">
+            R$ 6.299,00
+            <small>ou 10x de R$ 629,90 sem juros</small>
+          </div>
+          <div class="stock-soft">Estoque: 12 unidades</div>
+        </div>
+        <div class="product-card-footer">
+          <span class="badge badge-green">Em estoque</span>
+          <button class="btn-ghost">Adicionar ao carrinho</button>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div>
+          <div class="product-card-header">
+            <div class="product-name">Smartphone ZX Max 128GB</div>
+            <div class="product-code">Código: #SPH-221</div>
+          </div>
+          <div class="product-meta">
+            <strong>Categoria:</strong> Smartphones
+          </div>
+          <div class="price">
+            R$ 2.199,00
+            <small>no boleto com 5% OFF</small>
+          </div>
+          <div class="stock-soft">Estoque: 4 unidades</div>
+        </div>
+        <div class="product-card-footer">
+          <span class="badge badge-yellow">Poucas unidades</span>
+          <button class="btn-ghost">Adicionar ao carrinho</button>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div>
+          <div class="product-card-header">
+            <div class="product-name">Headset Gamer Surround</div>
+            <div class="product-code">Código: #HST-087</div>
+          </div>
+          <div class="product-meta">
+            <strong>Categoria:</strong> Periféricos
+          </div>
+          <div class="price">
+            R$ 349,90
+            <small>som imersivo 7.1 virtual</small>
+          </div>
+          <div class="stock-soft">Estoque: 29 unidades</div>
+        </div>
+        <div class="product-card-footer">
+          <span class="badge badge-green">Em estoque</span>
+          <button class="btn-ghost">Adicionar ao carrinho</button>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div>
+          <div class="product-card-header">
+            <div class="product-name">Teclado Mecânico Compact</div>
+            <div class="product-code">Código: #TCL-552</div>
+          </div>
+          <div class="product-meta">
+            <strong>Categoria:</strong> Periféricos
+          </div>
+          <div class="price">
+            R$ 489,00
+            <small>layout ABNT2, switches Red</small>
+          </div>
+          <div class="stock-soft">Estoque: 0 unidade</div>
+        </div>
+        <div class="product-card-footer">
+          <span class="badge badge-danger">Esgotado</span>
+          <button class="btn-ghost" disabled>Indisponível</button>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div>
+          <div class="product-card-header">
+            <div class="product-name">Carregador Turbo 30W USB-C</div>
+            <div class="product-code">Código: #ACC-301</div>
+          </div>
+          <div class="product-meta">
+            <strong>Categoria:</strong> Acessórios
+          </div>
+          <div class="price">
+            R$ 129,90
+            <small>proteção contra sobrecarga</small>
+          </div>
+          <div class="stock-soft">Estoque: 18 unidades</div>
+        </div>
+        <div class="product-card-footer">
+          <span class="badge badge-gray">Normal</span>
+          <button class="btn-ghost">Adicionar ao carrinho</button>
+        </div>
+      </article>
+
+      <article class="product-card">
+        <div>
+          <div class="product-card-header">
+            <div class="product-name">Mouse Wireless Silent</div>
+            <div class="product-code">Código: #MSE-410</div>
+          </div>
+          <div class="product-meta">
+            <strong>Categoria:</strong> Periféricos
+          </div>
+          <div class="price">
+            R$ 99,90
+            <small>até 18 meses de bateria</small>
+          </div>
+          <div class="stock-soft">Estoque: 35 unidades</div>
+        </div>
+        <div class="product-card-footer">
+          <span class="badge badge-green">Em estoque</span>
+          <button class="btn-ghost">Adicionar ao carrinho</button>
+        </div>
+      </article>
+
+    </section>
+
+    <footer class="footer-actions">
+      <div class="footer-actions-left">
+        <button class="btn-outline">Filtrar / Ordenar resultados</button>
+        <button class="btn-outline">Exportar lista</button>
+      </div>
+
+      <div class="footer-actions-right">
+        <button class="btn-outline">Ver carrinho (7)</button>
+        <button class="btn-outline btn-outline-strong">Finalizar compra</button>
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+</html> -->

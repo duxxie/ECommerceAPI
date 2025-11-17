@@ -12,7 +12,6 @@ namespace Ecommerce.Routes
             app.MapPost("/login", async (LoginRequest login, AppDbContext db) =>
             {
                 var cliente = await db.Clientes
-                    .AsNoTracking()
                     .FirstOrDefaultAsync(c => c.Email == login.Email);
 
                 if(cliente is null)
@@ -23,21 +22,52 @@ namespace Ecommerce.Routes
                 if(!senhaOk)
                     return Results.Unauthorized();
 
+                var carrinho = await db.Carrinhos
+                    .Include(c => c.Itens)
+                    .FirstOrDefaultAsync(c => c.ClienteId == cliente.Id);
+                
+                if(carrinho is null)
+                {
+                    carrinho = new Carrinho
+                    {
+                        ClienteId = cliente.Id,
+                        Itens = new List<ItemCarrinho>()
+                    };
+
+                    db.Carrinhos.Add(carrinho);
+                    await db.SaveChangesAsync();
+                }
+
                 var primeiroNome = cliente.Nome
                     .Split(' ', StringSplitOptions.RemoveEmptyEntries)
                     .FirstOrDefault() ?? string.Empty;
 
-                var clienteResposta = new
+                var resposta = new
                 {
-                    cliente.Id,
-                    cliente.Nome,
-                    PrimeiroNome = primeiroNome,
-                    cliente.Email,
-                    cliente.Telefone,
-                    cliente.Endereco
-                };
+                    Cliente = new
+                    {
+                        cliente.Id,
+                        cliente.Nome,
+                        PrimeiroNome = primeiroNome,
+                        cliente.Email,
+                        cliente.Telefone,
+                        cliente.Endereco,
+                    },
+                    Carrinho = new
+                    {
+                        carrinho.Id,
+                        carrinho.ClienteId,
+                        Itens = carrinho.Itens.Select(i => new
+                        {
+                            i.Id,
+                            i.ProdutoId,
+                            i.Quantidade,
+                            i.PrecoUnitario
+                        })
+                    }
 
-                return Results.Ok(clienteResposta);
+                };
+                return Results.Ok(resposta);
             });
         }
     }

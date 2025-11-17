@@ -130,13 +130,28 @@ namespace Ecommerce.Routes
                 if (cliente is null)
                     return Results.NotFound("Cliente não encontrado");
 
+
                 cliente.Nome = clienteAtualizado.Nome;
                 cliente.Email = clienteAtualizado.Email;
                 cliente.Telefone = clienteAtualizado.Telefone;
                 cliente.Endereco = clienteAtualizado.Endereco;
 
+                var primeiroNome = cliente.Nome
+                    .Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                    .FirstOrDefault() ?? string.Empty;
+
+                var clienteRead = new
+                {
+                    cliente.Id,
+                    cliente.Nome,
+                    PrimeiroNome = primeiroNome,
+                    cliente.Email,
+                    cliente.Telefone,
+                    cliente.Endereco
+                };
+
                 await db.SaveChangesAsync();
-                return Results.Ok(cliente);
+                return Results.Ok(clienteRead);
             }); 
 
 

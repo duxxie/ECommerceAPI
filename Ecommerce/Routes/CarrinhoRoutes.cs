@@ -51,13 +51,7 @@ namespace Ecommerce.Routes
                             i.Quantidade,
                             i.PrecoUnitario
                         }),
-                        c.ClienteId,
-                        Cliente = c.Cliente == null ? null : new
-                        {
-                            c.Cliente.Nome,
-                            c.Cliente.Email,
-                            c.Cliente.Telefone
-                        }
+                        c.ClienteId
                     })
                     .FirstOrDefaultAsync();
                 return carrinho is null ? Results.NotFound() : Results.Ok(carrinho);
