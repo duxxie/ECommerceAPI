@@ -1,0 +1,785 @@
+<!-- TELA CONFIRMACAO -->
+<!-- <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Confirmação do Pedido</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-body: #f3f4f8;
+      --bg-card: #ffffff;
+      --border-subtle: #e5e7eb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --primary: #2563eb;
+      --primary-soft: #e0edff;
+      --success-bg: #dcfce7;
+      --success-text: #15803d;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+      --shadow-card: 0 18px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1120px;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid #e5e7f0;
+      padding: 24px 24px 18px;
+    }
+
+    /* Cabeçalho */
+
+    .app-header {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .app-header-main h1 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .app-header-main p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .app-header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border-radius: var(--radius-pill);
+      padding: 9px 18px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+                  box-shadow 0.15s ease, transform 0.05s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: #f9fafb;
+    }
+
+    .btn-outline {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 9px 16px;
+      font-size: 0.82rem;
+      background: #ffffff;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-main);
+      transition: background 0.12s ease, border-color 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      background: #f3f4fb;
+      border-color: #cbd5f5;
+    }
+
+    .btn-outline-strong {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #eef3ff;
+    }
+
+    .btn-outline-strong:hover {
+      background: #e0edff;
+    }
+
+    /* Steps */
+
+    .steps {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .step-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 2px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      background: #f9fafb;
+      color: var(--text-muted);
+    }
+
+    .step-label {
+      font-weight: 500;
+    }
+
+    .step.completed .step-circle {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .step.active .step-circle {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .step-line {
+      flex: 1;
+      height: 1px;
+      background: #e5e7eb;
+      margin: 0 6px;
+    }
+
+    /* Layout principal */
+
+    .confirmation-wrapper {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.1fr);
+      gap: 20px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .left-column,
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .card {
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      padding: 16px 16px 14px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .card-header h2 {
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+
+    .card-header span {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    /* Status principal */
+
+    .status-card {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 18px 16px 14px;
+      background: linear-gradient(115deg, #f3f5ff, #ffffff);
+      border-radius: var(--radius-md);
+      border: 1px solid #dde4ff;
+    }
+
+    .status-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .status-icon-circle {
+      width: 44px;
+      height: 44px;
+      border-radius: 999px;
+      background: var(--success-bg);
+      color: var(--success-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      box-shadow: 0 10px 25px rgba(22, 163, 74, 0.25);
+    }
+
+    .status-content-title {
+      font-size: 1.02rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .status-content-text {
+      font-size: 0.86rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .status-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 2px;
+    }
+
+    .status-tag {
+      font-size: 0.75rem;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: #eef3ff;
+      color: var(--primary);
+      border: 1px solid #dbe3ff;
+    }
+
+    .status-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      font-size: 0.8rem;
+      margin-top: 6px;
+    }
+
+    .status-meta-item span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+    }
+
+    .status-meta-item strong {
+      font-weight: 600;
+    }
+
+    /* Texto / listas */
+
+    .info-row {
+      font-size: 0.85rem;
+      margin-bottom: 6px;
+    }
+
+    .info-row span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      margin-bottom: 1px;
+    }
+
+    .info-row strong {
+      font-weight: 600;
+    }
+
+    .info-row small {
+      display: block;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .divider {
+      margin: 8px 0;
+      border-top: 1px solid #edf0ff;
+    }
+
+    /* Resumo de produtos */
+
+    .products-list {
+      border-radius: 10px;
+      border: 1px solid #edf0ff;
+      background: #f8f9ff;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+    }
+
+    .products-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 3px;
+    }
+
+    .products-item:last-child {
+      margin-bottom: 0;
+    }
+
+    /* Totais */
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.86rem;
+      margin-bottom: 6px;
+    }
+
+    .summary-row span {
+      color: var(--text-muted);
+    }
+
+    .summary-row strong {
+      font-weight: 600;
+    }
+
+    .summary-row.total {
+      margin-top: 6px;
+      padding-top: 10px;
+      border-top: 1px dashed #e5e7eb;
+    }
+
+    .summary-row.total span {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .summary-row.total strong {
+      font-size: 1.02rem;
+      color: var(--primary);
+    }
+
+    .summary-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      margin-bottom: 10px;
+    }
+
+    /* Timeline de status */
+
+    .timeline {
+      margin-top: 4px;
+    }
+
+    .timeline-item {
+      display: grid;
+      grid-template-columns: 18px 1fr;
+      column-gap: 8px;
+      font-size: 0.8rem;
+      margin-bottom: 8px;
+    }
+
+    .timeline-marker {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 3px;
+    }
+
+    .timeline-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      border: 2px solid var(--primary);
+      background: #ffffff;
+    }
+
+    .timeline-dot.filled {
+      background: var(--primary);
+    }
+
+    .timeline-line {
+      flex: 1;
+      width: 2px;
+      background: #e5e7eb;
+      margin-top: 2px;
+    }
+
+    .timeline-content-title {
+      font-weight: 500;
+      margin-bottom: 1px;
+    }
+
+    .timeline-content-text {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .timeline-content-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Próximos passos */
+
+    .next-steps-list {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      padding-left: 18px;
+      margin-top: 4px;
+    }
+
+    .next-steps-list li {
+      margin-bottom: 4px;
+    }
+
+    /* Rodapé */
+
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 18px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7f0;
+    }
+
+    .footer-actions-left,
+    .footer-actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .confirmation-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 12px;
+      }
+
+      .app-shell {
+        padding: 16px 14px 14px;
+        border-radius: 12px;
+      }
+
+      .app-header {
+        flex-direction: column;
+      }
+
+      .footer-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+
+    
+    <header class="app-header">
+      <div class="app-header-main">
+        <h1>Pedido confirmado</h1>
+        <p>Obrigado pela compra! Abaixo você acompanha os detalhes e o andamento do seu pedido.</p>
+      </div>
+      <div class="app-header-actions">
+        <button class="btn-secondary">Voltar à loja</button>
+        <button class="btn-primary">Ver detalhes completos</button>
+      </div>
+    </header>
+
+ 
+    <nav class="steps" aria-label="Etapas do checkout">
+      <div class="step completed">
+        <div class="step-circle">1</div>
+        <span class="step-label">Carrinho</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step completed">
+        <div class="step-circle">2</div>
+        <span class="step-label">Dados e pagamento</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step active">
+        <div class="step-circle">3</div>
+        <span class="step-label">Confirmação</span>
+      </div>
+    </nav>
+
+    <main class="confirmation-wrapper">
+      
+      <section class="left-column">
+
+        <article class="status-card">
+          <div class="status-icon">
+            <div class="status-icon-circle">✓</div>
+          </div>
+          <div>
+            <div class="status-content-title">Seu pedido foi recebido com sucesso</div>
+            <div class="status-content-text">
+              Enviamos um e-mail com o resumo da compra e o comprovante de pagamento.
+            </div>
+
+            <div class="status-tags">
+              <span class="status-tag">Pagamento aprovado</span>
+              <span class="status-tag">Entrega em preparação</span>
+            </div>
+
+            <div class="status-meta">
+              <div class="status-meta-item">
+                <span>Número do pedido</span>
+                <strong>#CP-2025-01873</strong>
+              </div>
+              <div class="status-meta-item">
+                <span>Data</span>
+                <strong>18/09/2025 às 19:14</strong>
+              </div>
+              <div class="status-meta-item">
+                <span>Previsão de entrega</span>
+                <strong>entre 24 e 26/09</strong>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <h2>Endereço e frete</h2>
+            <span>Informações de entrega</span>
+          </div>
+
+          <div class="info-row">
+            <span>Endereço de entrega</span>
+            <strong>Gustavo Falcão</strong>
+            <small>Rua Exemplo, 123 • Bairro Centro • Curitiba - PR</small>
+            <small>CEP 80000-000</small>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="info-row">
+            <span>Opção de frete</span>
+            <strong>Frete econômico — R$ 19,90</strong>
+            <small>Entrega estimada entre 6 e 8 dias úteis após confirmação do pagamento.</small>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <h2>Pagamento</h2>
+            <span>Forma utilizada na compra</span>
+          </div>
+
+          <div class="info-row">
+            <span>Método de pagamento</span>
+            <strong>Cartão de crédito</strong>
+            <small>Final 1234 • Bandeira ExemploCard</small>
+          </div>
+
+          <div class="info-row">
+            <span>Parcelamento</span>
+            <strong>10x de R$ 1.132,66 sem juros</strong>
+            <small>Serão lançadas parcelas mensais no seu cartão.</small>
+          </div>
+
+          <div class="divider"></div>
+
+          <div class="info-row">
+            <span>Status do pagamento</span>
+            <strong style="color: var(--success-text);">Aprovado</strong>
+            <small>Transação confirmada em 18/09/2025 às 19:15.</small>
+          </div>
+        </article>
+      </section>
+
+      <section class="right-column">
+
+        <article class="card">
+          <div class="card-header">
+            <h2>Resumo do pedido</h2>
+            <span>7 itens</span>
+          </div>
+
+          <div class="products-list">
+            <div class="products-item">
+              <span>Notebook Pro 14" i7 16GB (1x)</span>
+              <span>R$ 6.299,00</span>
+            </div>
+            <div class="products-item">
+              <span>Smartphone ZX Max 128GB (2x)</span>
+              <span>R$ 4.398,00</span>
+            </div>
+            <div class="products-item">
+              <span>Headset Gamer Surround (1x)</span>
+              <span>R$ 349,90</span>
+            </div>
+            <div class="products-item">
+              <span>Teclado Mecânico Compact (1x)</span>
+              <span>R$ 489,00</span>
+            </div>
+            <div class="products-item">
+              <span>Carregador Turbo 30W USB-C (2x)</span>
+              <span>R$ 259,80</span>
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <span>Subtotal dos produtos</span>
+            <strong>R$ 11.795,70</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Frete</span>
+            <strong>R$ 19,90</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Descontos</span>
+            <strong>R$ 0,00</strong>
+          </div>
+
+          <div class="summary-row total">
+            <span>Total pago</span>
+            <strong>R$ 11.815,60</strong>
+          </div>
+
+          <p class="summary-note">
+            Você receberá um e-mail sempre que o status do pedido for atualizado (separação, envio e entrega).
+          </p>
+
+          <div class="summary-note">
+            <strong>Dúvidas?</strong> Responda o e-mail de confirmação ou entre em contato com nosso suporte.
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <h2>Acompanhamento</h2>
+            <span>Etapas do pedido</span>
+          </div>
+
+          <div class="timeline">
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <div class="timeline-dot filled"></div>
+                <div class="timeline-line"></div>
+              </div>
+              <div>
+                <div class="timeline-content-title">Pedido confirmado</div>
+                <div class="timeline-content-text">Recebemos seu pedido e o pagamento foi aprovado.</div>
+                <div class="timeline-content-time">18/09/2025 às 19:15</div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <div class="timeline-dot filled"></div>
+                <div class="timeline-line"></div>
+              </div>
+              <div>
+                <div class="timeline-content-title">Preparando para envio</div>
+                <div class="timeline-content-text">Nossa equipe está separando os itens no centro de distribuição.</div>
+                <div class="timeline-content-time">Previsto para ainda hoje</div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <div class="timeline-dot"></div>
+                <div class="timeline-line"></div>
+              </div>
+              <div>
+                <div class="timeline-content-title">Em transporte</div>
+                <div class="timeline-content-text">O pedido será coletado pela transportadora e seguirá para o seu endereço.</div>
+                <div class="timeline-content-time">Atualizaremos assim que o pedido sair para entrega.</div>
+              </div>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-marker">
+                <div class="timeline-dot"></div>
+              </div>
+              <div>
+                <div class="timeline-content-title">Entregue</div>
+                <div class="timeline-content-text">Você receberá uma notificação assim que a entrega for concluída.</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <div class="card-header">
+            <h2>Próximos passos</h2>
+            <span>O que você pode fazer agora</span>
+          </div>
+          <ul class="next-steps-list">
+            <li>Acompanhar o status do pedido pelo link enviado no e-mail.</li>
+            <li>Imprimir ou salvar o comprovante de pagamento, se desejar.</li>
+            <li>Atualizar o telefone ou endereço entrando em contato com o suporte, se for necessário.</li>
+          </ul>
+        </article>
+      </section>
+    </main>
+
+    <footer class="footer-actions">
+      <div class="footer-actions-left">
+        <button class="btn-outline">Imprimir resumo</button>
+      </div>
+      <div class="footer-actions-right">
+        <button class="btn-outline">Voltar para a página inicial</button>
+        <button class="btn-outline btn-outline-strong">Ver meus pedidos</button>
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+</html> -->

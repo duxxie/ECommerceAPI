@@ -153,9 +153,8 @@ async function handlerActionsCadastro(API) {
 
             const clienteCriado = await resposta.json();
 
-            localStorage.setItem('userLogado', JSON.stringify(clienteCriado));
-
-            mostrarFormularioOuMsg(true);
+            if(clienteCriado)
+                mostrarFormularioOuMsg(true);
         } 
         else {
             return;
@@ -164,14 +163,13 @@ async function handlerActionsCadastro(API) {
 }
 
 async function mostrarBoasVindas(root) {
-    const userLogado = JSON.parse(localStorage.getItem('userLogado'));
     root.innerHTML = `
         <div class="msg-cadastro">
             <div class="msg-sucess">
-            Olá ${userLogado.nome}, seu cadastro foi realizado com sucesso !!
+             Seu cadastro foi realizado com sucesso !!
             </div>
             <div class="msg-info">
-                Clique no botão abaixo para voltar ás compras.
+                Você já pode voltar e realizar o login.
             </div>
             <div class="caixa-voltar" id="actions">
                 <button class="btn btn-primary" id="voltar-greeting">Voltar</button>
@@ -179,7 +177,6 @@ async function mostrarBoasVindas(root) {
         </div>
     `
     handlerActionsBoasVindas();
-
 }
 
 async function handlerActionsBoasVindas() {

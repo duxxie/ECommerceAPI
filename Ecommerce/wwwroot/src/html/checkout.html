@@ -1,0 +1,884 @@
+<!-- TELA CHECKOU/PAGAMENTO -->
+<!-- <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Checkout e Pagamento</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-body: #f3f4f8;
+      --bg-card: #ffffff;
+      --border-subtle: #e5e7eb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --primary: #2563eb;
+      --primary-soft: #e0edff;
+      --danger-bg: #fee2e2;
+      --danger-text: #b91c1c;
+      --radius-lg: 16px;
+      --radius-md: 10px;
+      --radius-pill: 999px;
+      --shadow-card: 0 18px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1120px;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid #e5e7f0;
+      padding: 24px 24px 18px;
+    }
+
+    /* Cabeçalho */
+
+    .app-header {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .app-header-main h1 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .app-header-main p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .app-header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border-radius: var(--radius-pill);
+      padding: 9px 18px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+                  box-shadow 0.15s ease, transform 0.05s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: #f9fafb;
+    }
+
+    .btn-outline {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 9px 16px;
+      font-size: 0.82rem;
+      background: #ffffff;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-main);
+      transition: background 0.12s ease, border-color 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      background: #f3f4fb;
+      border-color: #cbd5f5;
+    }
+
+    .btn-outline-strong {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #eef3ff;
+    }
+
+    .btn-outline-strong:hover {
+      background: #e0edff;
+    }
+
+    /* Steps */
+
+    .steps {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-bottom: 18px;
+    }
+
+    .step {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .step-circle {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      border: 2px solid var(--border-subtle);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.75rem;
+      background: #f9fafb;
+      color: var(--text-muted);
+    }
+
+    .step.active .step-circle {
+      border-color: var(--primary);
+      background: var(--primary-soft);
+      color: var(--primary);
+    }
+
+    .step.completed .step-circle {
+      border-color: var(--primary);
+      background: var(--primary);
+      color: #ffffff;
+    }
+
+    .step-label {
+      font-weight: 500;
+    }
+
+    .step-line {
+      flex: 1;
+      height: 1px;
+      background: #e5e7eb;
+      margin: 0 6px;
+    }
+
+    /* Layout principal */
+
+    .checkout-wrapper {
+      display: grid;
+      grid-template-columns: minmax(0, 2.1fr) minmax(0, 1.1fr);
+      gap: 20px;
+      align-items: flex-start;
+      margin-bottom: 10px;
+    }
+
+    .form-column {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .summary-column {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    /* Cards de formulário */
+
+    .form-card {
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      padding: 16px 16px 14px;
+    }
+
+    .form-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .form-card-header h2 {
+      font-size: 0.98rem;
+      font-weight: 600;
+    }
+
+    .form-card-header span {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .field-group {
+      margin-bottom: 10px;
+    }
+
+    .field-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 4px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .field-label span {
+      font-weight: 500;
+      color: var(--text-main);
+    }
+
+    .field-label small {
+      font-size: 0.74rem;
+      color: var(--text-muted);
+    }
+
+    .field-row {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    input[type="number"],
+    select {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      padding: 9px 11px;
+      font-size: 0.86rem;
+      outline: none;
+      background: #f9fafb;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    input:focus,
+    select:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.18);
+      background: #ffffff;
+    }
+
+    /* Opções (frete / pagamento) */
+
+    .options-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .option-card {
+      border-radius: 12px;
+      border: 1px solid var(--border-subtle);
+      padding: 9px 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      background: #f9fafb;
+      transition: border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+      font-size: 0.84rem;
+    }
+
+    .option-card-main {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .option-title {
+      font-weight: 500;
+      font-size: 0.86rem;
+    }
+
+    .option-desc {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .option-right {
+      text-align: right;
+      font-size: 0.8rem;
+    }
+
+    .option-right strong {
+      display: block;
+      font-weight: 600;
+    }
+
+    .option-tag {
+      font-size: 0.72rem;
+      color: var(--primary);
+      background: var(--primary-soft);
+      border-radius: 999px;
+      padding: 2px 8px;
+      display: inline-block;
+      margin-top: 4px;
+    }
+
+    .option-indicator {
+      width: 14px;
+      height: 14px;
+      border-radius: 999px;
+      border: 2px solid var(--border-subtle);
+      background: #ffffff;
+      flex-shrink: 0;
+    }
+
+    .option-card.selected {
+      border-color: var(--primary);
+      background: #eef3ff;
+      box-shadow: 0 8px 20px rgba(37, 99, 235, 0.10);
+    }
+
+    .option-card.selected .option-indicator {
+      border-color: var(--primary);
+      background: var(--primary);
+    }
+
+    /* Campos de cartão */
+
+    .inline-hint {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Resumo do pedido */
+
+    .summary-card {
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      padding: 16px 16px 14px;
+    }
+
+    .summary-card h2 {
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.86rem;
+      margin-bottom: 6px;
+    }
+
+    .summary-row span {
+      color: var(--text-muted);
+    }
+
+    .summary-row strong {
+      font-weight: 600;
+    }
+
+    .summary-row.total {
+      margin-top: 6px;
+      padding-top: 10px;
+      border-top: 1px dashed #e5e7eb;
+    }
+
+    .summary-row.total span {
+      font-weight: 600;
+      color: var(--text-main);
+    }
+
+    .summary-row.total strong {
+      font-size: 1.02rem;
+      color: var(--primary);
+    }
+
+    .summary-products {
+      border-radius: 10px;
+      border: 1px solid #edf0ff;
+      background: #f8f9ff;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+    }
+
+    .summary-products-item {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 2px;
+    }
+
+    .summary-note {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 6px;
+      margin-bottom: 10px;
+    }
+
+    .summary-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .summary-actions .btn-primary,
+    .summary-actions .btn-secondary {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .alert {
+      border-radius: 10px;
+      background: var(--danger-bg);
+      color: var(--danger-text);
+      padding: 8px 10px;
+      font-size: 0.78rem;
+      margin-top: 4px;
+    }
+
+    /* Rodapé */
+
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 18px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7f0;
+    }
+
+    .footer-actions-left,
+    .footer-actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 900px) {
+      .checkout-wrapper {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 12px;
+      }
+
+      .app-shell {
+        padding: 16px 14px 14px;
+        border-radius: 12px;
+      }
+
+      .app-header {
+        flex-direction: column;
+      }
+
+      .field-row {
+        grid-template-columns: 1fr;
+      }
+
+      .footer-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+
+    <header class="app-header">
+      <div class="app-header-main">
+        <h1>Checkout e pagamento</h1>
+        <p>Preencha seus dados, escolha o frete e finalize a compra com segurança.</p>
+      </div>
+      <div class="app-header-actions">
+        <button class="btn-secondary">Voltar ao carrinho</button>
+        <button class="btn-primary">Finalizar compra</button>
+      </div>
+    </header>
+
+    <nav class="steps" aria-label="Etapas do checkout">
+      <div class="step completed">
+        <div class="step-circle">1</div>
+        <span class="step-label">Carrinho</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step active">
+        <div class="step-circle">2</div>
+        <span class="step-label">Dados e pagamento</span>
+      </div>
+      <div class="step-line"></div>
+      <div class="step">
+        <div class="step-circle">3</div>
+        <span class="step-label">Confirmação</span>
+      </div>
+    </nav>
+
+    <main class="checkout-wrapper">
+      <section class="form-column">
+
+        <article class="form-card">
+          <div class="form-card-header">
+            <h2>Dados do cliente</h2>
+            <span>Quem está realizando a compra?</span>
+          </div>
+
+          <div class="field-group">
+            <div class="field-label">
+              <span>Nome completo</span>
+              <small>Como está no documento</small>
+            </div>
+            <input type="text" placeholder="Digite seu nome completo" />
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <div class="field-label">
+                <span>E-mail</span>
+                <small>Para envio de confirmação</small>
+              </div>
+              <input type="email" placeholder="seuemail@exemplo.com" />
+            </div>
+            <div class="field-group">
+              <div class="field-label">
+                <span>Telefone</span>
+                <small>WhatsApp de contato</small>
+              </div>
+              <input type="tel" placeholder="(00) 00000-0000" />
+            </div>
+          </div>
+        </article>
+
+        <article class="form-card">
+          <div class="form-card-header">
+            <h2>Endereço de entrega</h2>
+            <span>Onde o pedido será entregue?</span>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <div class="field-label">
+                <span>CEP</span>
+                <small>Usado para calcular o frete</small>
+              </div>
+              <input type="text" placeholder="00000-000" />
+            </div>
+            <div class="field-group">
+              <div class="field-label">
+                <span>Estado</span>
+              </div>
+              <select>
+                <option>Selecione</option>
+                <option>PR</option>
+                <option>SC</option>
+                <option>SP</option>
+                <option>RJ</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <div class="field-label">
+                <span>Cidade</span>
+              </div>
+              <input type="text" placeholder="Cidade" />
+            </div>
+            <div class="field-group">
+              <div class="field-label">
+                <span>Bairro</span>
+              </div>
+              <input type="text" placeholder="Bairro" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <div class="field-label">
+                <span>Endereço</span>
+              </div>
+              <input type="text" placeholder="Rua, avenida, número" />
+            </div>
+            <div class="field-group">
+              <div class="field-label">
+                <span>Complemento</span>
+                <small>Opcional</small>
+              </div>
+              <input type="text" placeholder="Apartamento, bloco, referência..." />
+            </div>
+          </div>
+        </article>
+
+        <article class="form-card">
+          <div class="form-card-header">
+            <h2>Opções de frete</h2>
+            <span>Escolha como deseja receber</span>
+          </div>
+
+          <div class="options-grid">
+            <div class="option-card selected">
+              <div class="option-card-main">
+                <div class="option-title">Frete econômico</div>
+                <div class="option-desc">Entrega entre 6 e 8 dias úteis</div>
+                <span class="option-tag">Melhor custo-benefício</span>
+              </div>
+              <div class="option-right">
+                <strong>R$ 19,90</strong>
+                <span>Prazo estimado</span>
+              </div>
+              <div class="option-indicator"></div>
+            </div>
+
+            <div class="option-card">
+              <div class="option-card-main">
+                <div class="option-title">Frete rápido</div>
+                <div class="option-desc">Entrega entre 2 e 3 dias úteis</div>
+              </div>
+              <div class="option-right">
+                <strong>R$ 39,90</strong>
+                <span>Maior prioridade</span>
+              </div>
+              <div class="option-indicator"></div>
+            </div>
+
+            <div class="option-card">
+              <div class="option-card-main">
+                <div class="option-title">Retirar em loja</div>
+                <div class="option-desc">Disponível em até 24h</div>
+              </div>
+              <div class="option-right">
+                <strong>R$ 0,00</strong>
+                <span>Endereço será informado</span>
+              </div>
+              <div class="option-indicator"></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="form-card">
+          <div class="form-card-header">
+            <h2>Forma de pagamento</h2>
+            <span>Selecione uma opção</span>
+          </div>
+
+          <div class="options-grid">
+            <div class="option-card selected">
+              <div class="option-card-main">
+                <div class="option-title">Cartão de crédito</div>
+                <div class="option-desc">Pague em até 10x sem juros</div>
+              </div>
+              <div class="option-right">
+                <strong>Cartão principal</strong>
+                <span>Mais utilizado</span>
+              </div>
+              <div class="option-indicator"></div>
+            </div>
+
+            <div class="option-card">
+              <div class="option-card-main">
+                <div class="option-title">Pix</div>
+                <div class="option-desc">Confirmação imediata e 5% de desconto</div>
+              </div>
+              <div class="option-right">
+                <strong>Desconto</strong>
+                <span>Aplicado no total</span>
+              </div>
+              <div class="option-indicator"></div>
+            </div>
+
+            <div class="option-card">
+              <div class="option-card-main">
+                <div class="option-title">Boleto bancário</div>
+                <div class="option-desc">Compensação em até 2 dias úteis</div>
+              </div>
+              <div class="option-right">
+                <strong>Sem desconto</strong>
+                <span>Vencimento em 3 dias</span>
+              </div>
+              <div class="option-indicator"></div>
+            </div>
+          </div>
+
+          <div class="field-group" style="margin-top: 12px;">
+            <div class="field-label">
+              <span>Número do cartão</span>
+              <small>Apenas números</small>
+            </div>
+            <input type="text" placeholder="0000 0000 0000 0000" />
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <div class="field-label">
+                <span>Nome impresso no cartão</span>
+              </div>
+              <input type="text" placeholder="Digite exatamente como está no cartão" />
+            </div>
+            <div class="field-group">
+              <div class="field-label">
+                <span>CPF do titular</span>
+              </div>
+              <input type="text" placeholder="000.000.000-00" />
+            </div>
+          </div>
+
+          <div class="field-row">
+            <div class="field-group">
+              <div class="field-label">
+                <span>Validade</span>
+              </div>
+              <input type="text" placeholder="MM/AA" />
+            </div>
+            <div class="field-group">
+              <div class="field-label">
+                <span>Código de segurança (CVV)</span>
+              </div>
+              <input type="number" placeholder="***" />
+            </div>
+          </div>
+
+          <div class="field-group">
+            <div class="field-label">
+              <span>Parcelamento</span>
+            </div>
+            <select>
+              <option>À vista (1x de R$ 4.339,90)</option>
+              <option>2x de R$ 2.169,95 sem juros</option>
+              <option>4x de R$ 1.084,98 sem juros</option>
+              <option>6x de R$ 723,32 sem juros</option>
+              <option>10x de R$ 433,99 sem juros</option>
+            </select>
+            <p class="inline-hint">O valor final pode mudar de acordo com o frete e descontos aplicados.</p>
+          </div>
+
+          <div class="alert">
+            Seus dados são criptografados e não ficam salvos no cartão de crédito sem a sua autorização.
+          </div>
+        </article>
+      </section>
+
+      <aside class="summary-column">
+
+        <section class="summary-card">
+          <h2>Resumo do pedido</h2>
+
+          <div class="summary-products">
+            <div class="summary-products-item">
+              <span>Notebook Pro 14" i7 16GB (1x)</span>
+              <span>R$ 6.299,00</span>
+            </div>
+            <div class="summary-products-item">
+              <span>Smartphone ZX Max 128GB (2x)</span>
+              <span>R$ 4.398,00</span>
+            </div>
+            <div class="summary-products-item">
+              <span>Headset Gamer Surround (1x)</span>
+              <span>R$ 349,90</span>
+            </div>
+            <div class="summary-products-item">
+              <span>Carregador Turbo 30W (2x)</span>
+              <span>R$ 259,80</span>
+            </div>
+          </div>
+
+          <div class="summary-row">
+            <span>Subtotal dos produtos</span>
+            <strong>R$ 11.306,70</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Frete (econômico)</span>
+            <strong>R$ 19,90</strong>
+          </div>
+
+          <div class="summary-row">
+            <span>Descontos</span>
+            <strong>R$ 0,00</strong>
+          </div>
+
+          <div class="summary-row total">
+            <span>Total estimado</span>
+            <strong>R$ 11.326,60</strong>
+          </div>
+
+          <p class="summary-note">
+            Ao clicar em <strong>Finalizar compra</strong> você concorda com os termos de uso e política de privacidade.
+          </p>
+
+          <div class="summary-actions">
+            <button class="btn btn-primary">Finalizar compra</button>
+            <button class="btn btn-secondary">Voltar ao carrinho</button>
+          </div>
+        </section>
+
+        <section class="summary-card">
+          <h2>Notas e observações</h2>
+          <div class="field-group">
+            <div class="field-label">
+              <span>Alguma instrução para entrega?</span>
+              <small>Opcional</small>
+            </div>
+            <textarea rows="4" style="
+              width:100%; border-radius:10px; border:1px solid var(--border-subtle);
+              padding:9px 11px; font-size:0.86rem; resize: vertical; background:#f9fafb;
+              font-family:inherit; outline:none;">
+</textarea>
+          </div>
+        </section>
+      </aside>
+    </main>
+
+    <footer class="footer-actions">
+      <div class="footer-actions-left">
+        <button class="btn-outline">Salvar dados para próxima compra</button>
+      </div>
+      <div class="footer-actions-right">
+        <button class="btn-outline">Voltar à lista de produtos</button>
+        <button class="btn-outline btn-outline-strong">Ir para confirmação</button>
+      </div>
+    </footer>
+
+  </div>
+
+</body>
+</html> -->

@@ -1,0 +1,645 @@
+<!-- TELA PEDIDOS -->
+<!-- <!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>Meus pedidos</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg-body: #f3f4f8;
+      --bg-card: #ffffff;
+      --border-subtle: #e5e7eb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --primary: #2563eb;
+      --primary-soft: #e0edff;
+      --badge-green-bg: #dcfce7;
+      --badge-green-text: #15803d;
+      --badge-yellow-bg: #fef3c7;
+      --badge-yellow-text: #b45309;
+      --badge-gray-bg: #f3f4f6;
+      --badge-gray-text: #4b5563;
+      --danger-bg: #fee2e2;
+      --danger-text: #b91c1c;
+      --radius-lg: 16px;
+      --radius-md: 12px;
+      --radius-pill: 999px;
+      --shadow-card: 0 18px 45px rgba(15, 23, 42, 0.08);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-body);
+      color: var(--text-main);
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 1120px;
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-card);
+      border: 1px solid #e5e7f0;
+      padding: 24px 24px 18px;
+    }
+
+    /* Cabeçalho */
+
+    .app-header {
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      align-items: flex-start;
+    }
+
+    .app-header-main h1 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .app-header-main p {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .app-header-actions {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      border-radius: var(--radius-pill);
+      padding: 9px 18px;
+      font-size: 0.86rem;
+      font-weight: 500;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease,
+                  box-shadow 0.15s ease, transform 0.05s ease;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #ffffff;
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: #1d4ed8;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text-main);
+      border-color: var(--border-subtle);
+    }
+
+    .btn-secondary:hover {
+      background: #f9fafb;
+    }
+
+    .btn-outline {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 9px 16px;
+      font-size: 0.82rem;
+      background: #ffffff;
+      cursor: pointer;
+      font-weight: 500;
+      color: var(--text-main);
+      transition: background 0.12s ease, border-color 0.12s ease;
+      white-space: nowrap;
+    }
+
+    .btn-outline:hover {
+      background: #f3f4fb;
+      border-color: #cbd5f5;
+    }
+
+    .btn-outline-strong {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: #eef3ff;
+    }
+
+    .btn-outline-strong:hover {
+      background: #e0edff;
+    }
+
+    /* Filtros superiores */
+
+    .filter-bar {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+      align-items: flex-end;
+      margin-bottom: 20px;
+    }
+
+    .filter-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .filter-group select,
+    .filter-group input {
+      width: 100%;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      padding: 10px 12px;
+      font-size: 0.88rem;
+      outline: none;
+      background: #f9fafb;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .filter-group select:focus,
+    .filter-group input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.18);
+      background: #ffffff;
+    }
+
+    .filter-actions {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+    }
+
+    .summary-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .summary-card {
+      padding: 14px 16px;
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      background: #f9fafb;
+    }
+
+    .summary-title {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .summary-main {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      margin-bottom: 2px;
+    }
+
+    .summary-main span {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--primary);
+    }
+
+    .summary-main small {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .summary-sub {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .table-wrapper {
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      overflow: hidden;
+      background: #ffffff;
+      margin-bottom: 16px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.86rem;
+    }
+
+    thead {
+      background: #f3f4fb;
+    }
+
+    thead th {
+      text-align: left;
+      padding: 10px 16px;
+      font-weight: 500;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    tbody tr {
+      border-bottom: 1px solid #f1f2f6;
+    }
+
+    tbody tr:last-child {
+      border-bottom: none;
+    }
+
+    tbody td {
+      padding: 11px 16px;
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+
+    .order-id {
+      font-weight: 600;
+      color: var(--primary);
+      font-size: 0.88rem;
+    }
+
+    .order-date {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .order-items {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .price {
+      font-weight: 600;
+    }
+
+    .price small {
+      display: block;
+      font-weight: 400;
+      color: var(--text-muted);
+      font-size: 0.78rem;
+      margin-top: 2px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .badge-green {
+      background: var(--badge-green-bg);
+      color: var(--badge-green-text);
+    }
+
+    .badge-yellow {
+      background: var(--badge-yellow-bg);
+      color: var(--badge-yellow-text);
+    }
+
+    .badge-gray {
+      background: var(--badge-gray-bg);
+      color: var(--badge-gray-text);
+    }
+
+    .badge-danger {
+      background: var(--danger-bg);
+      color: var(--danger-text);
+    }
+
+    .btn-ghost {
+      border-radius: var(--radius-pill);
+      border: 1px solid var(--border-subtle);
+      padding: 7px 14px;
+      font-size: 0.8rem;
+      background: #ffffff;
+      cursor: pointer;
+      color: var(--primary);
+      font-weight: 500;
+      white-space: nowrap;
+      transition: background 0.12s ease, border-color 0.12s ease, transform 0.05s ease;
+    }
+
+    .btn-ghost:hover {
+      background: var(--primary-soft);
+      border-color: rgba(37, 99, 235, 0.35);
+      transform: translateY(-1px);
+    }
+
+
+    .footer-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #e5e7f0;
+    }
+
+    .footer-actions-left,
+    .footer-actions-right {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    @media (max-width: 1024px) {
+      .filter-bar {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 900px) {
+      .summary-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 720px) {
+      body {
+        padding: 12px;
+      }
+
+      .app-shell {
+        padding: 16px 14px 14px;
+        border-radius: 12px;
+      }
+
+      .app-header {
+        flex-direction: column;
+      }
+
+      .filter-bar {
+        grid-template-columns: 1fr;
+      }
+
+      .filter-actions {
+        justify-content: flex-start;
+        flex-wrap: wrap;
+      }
+
+      .table-wrapper {
+        border-radius: 10px;
+        overflow-x: auto;
+      }
+
+      table {
+        min-width: 760px;
+      }
+
+      .footer-actions {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-shell">
+    <header class="app-header">
+      <div class="app-header-main">
+        <h1>Meus pedidos</h1>
+        <p>Acompanhe o histórico de compras, status de entrega e comprovantes de pagamento.</p>
+      </div>
+      <div class="app-header-actions">
+        <button class="btn-secondary">Voltar à loja</button>
+        <button class="btn-primary">Novo pedido</button>
+      </div>
+    </header>
+
+    <section class="filter-bar">
+      <div class="filter-group">
+        <label for="status">Status do pedido</label>
+        <select id="status">
+          <option>Todos os status</option>
+          <option>Em processamento</option>
+          <option>Em transporte</option>
+          <option>Entregue</option>
+          <option>Cancelado</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="periodo">Período</label>
+        <select id="periodo">
+          <option>Últimos 30 dias</option>
+          <option>Últimos 3 meses</option>
+          <option>Últimos 6 meses</option>
+          <option>Últimos 12 meses</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="ordenar">Ordenar por</label>
+        <select id="ordenar">
+          <option>Mais recente primeiro</option>
+          <option>Mais antigo primeiro</option>
+          <option>Maior valor</option>
+          <option>Menor valor</option>
+        </select>
+      </div>
+
+      <div class="filter-group">
+        <label for="busca">Buscar pedido</label>
+        <div class="filter-actions">
+          <input id="busca" type="text" placeholder="Número do pedido ou produto" />
+          <button class="btn btn-primary">Filtrar</button>
+          <button class="btn btn-secondary">Limpar</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="summary-grid">
+      <article class="summary-card">
+        <div class="summary-title">Total de pedidos</div>
+        <div class="summary-main">
+          <span>18</span>
+          <small>no período selecionado</small>
+        </div>
+        <div class="summary-sub">inclui pedidos entregues, em andamento e cancelados</div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-title">Em andamento</div>
+        <div class="summary-main">
+          <span>3</span>
+          <small>aguardando entrega</small>
+        </div>
+        <div class="summary-sub">acompanhe o status em tempo real</div>
+      </article>
+
+      <article class="summary-card">
+        <div class="summary-title">Última compra</div>
+        <div class="summary-main">
+          <span>R$ 2.799,00</span>
+        </div>
+        <div class="summary-sub">realizada em 14/09/2025</div>
+      </article>
+    </section>
+
+    <section class="table-wrapper" aria-label="Lista de pedidos">
+      <table>
+        <thead>
+          <tr>
+            <th>Pedido</th>
+            <th>Data</th>
+            <th>Itens</th>
+            <th>Valor total</th>
+            <th>Status</th>
+            <th style="text-align:right;">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              <div class="order-id">#CP-2025-01873</div>
+              <div class="order-date">Pagamento via cartão de crédito</div>
+            </td>
+            <td>18/09/2025</td>
+            <td>
+              <div class="order-items">7 itens</div>
+              <div class="order-items">Notebook, smartphone, periféricos…</div>
+            </td>
+            <td class="price">
+              R$ 11.815,60
+              <small>10x de R$ 1.132,66 sem juros</small>
+            </td>
+            <td>
+              <span class="badge badge-green">Entrega em preparação</span>
+            </td>
+            <td style="text-align:right;">
+              <button class="btn-ghost">Ver detalhes</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="order-id">#CP-2025-01790</div>
+              <div class="order-date">Pagamento via Pix</div>
+            </td>
+            <td>05/09/2025</td>
+            <td>
+              <div class="order-items">3 itens</div>
+              <div class="order-items">Monitor, teclado, mouse</div>
+            </td>
+            <td class="price">
+              R$ 2.199,90
+              <small>Desconto aplicado no Pix</small>
+            </td>
+            <td>
+              <span class="badge badge-yellow">Em transporte</span>
+            </td>
+            <td style="text-align:right;">
+              <button class="btn-ghost">Rastrear pedido</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="order-id">#CP-2025-01642</div>
+              <div class="order-date">Pagamento via cartão de crédito</div>
+            </td>
+            <td>22/08/2025</td>
+            <td>
+              <div class="order-items">1 item</div>
+              <div class="order-items">Smartphone ZX Max 256GB</div>
+            </td>
+            <td class="price">
+              R$ 3.099,00
+              <small>3x de R$ 1.033,00 sem juros</small>
+            </td>
+            <td>
+              <span class="badge badge-green">Entregue</span>
+            </td>
+            <td style="text-align:right;">
+              <button class="btn-ghost">Ver nota fiscal</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="order-id">#CP-2025-01501</div>
+              <div class="order-date">Pagamento via boleto</div>
+            </td>
+            <td>10/08/2025</td>
+            <td>
+              <div class="order-items">2 itens</div>
+              <div class="order-items">Fone bluetooth, carregador turbo</div>
+            </td>
+            <td class="price">
+              R$ 389,80
+              <small>Boleto não pago</small>
+            </td>
+            <td>
+              <span class="badge badge-danger">Cancelado</span>
+            </td>
+            <td style="text-align:right;">
+              <button class="btn-ghost">Refazer pedido</button>
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <div class="order-id">#CP-2025-01433</div>
+              <div class="order-date">Pagamento via Pix</div>
+            </td>
+            <td>29/07/2025</td>
+            <td>
+              <div class="order-items">4 itens</div>
+              <div class="order-items">SSD, memória RAM, cabo HDMI…</div>
+            </td>
+            <td class="price">
+              R$ 1.289,50
+              <small>Pedido já entregue</small>
+            </td>
+            <td>
+              <span class="badge badge-gray">Histórico</span>
+            </td>
+            <td style="text-align:right;">
+              <button class="btn-ghost">Comprar novamente</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <footer class="footer-actions">
+      <div class="footer-actions-left">
+        <button class="btn-outline">Exportar histórico (PDF)</button>
+      </div>
+      <div class="footer-actions-right">
+        <button class="btn-outline">Voltar para a página inicial</button>
+        <button class="btn-outline btn-outline-strong">Ver último pedido</button>
+      </div>
+    </footer>
+  </div>
+
+</body>
+</html> -->

@@ -96,9 +96,14 @@ function handlerOpcoes(API) {
                 return
             }
             
-            const clienteLogado = await resposta.json();
+            const dadosResposta = await resposta.json();
 
-            localStorage.setItem('userLogado', JSON.stringify(clienteLogado));
+            const cliente = dadosResposta.cliente;
+            const carrinho = dadosResposta.carrinho;
+
+            localStorage.setItem('usuarioLogado', JSON.stringify(cliente));
+
+            localStorage.setItem('carrinho', JSON.stringify(carrinho));
 
             setNavegacaoState('home');
             render();

@@ -185,3 +185,16 @@
     background: #f3f4fb;
     border-color: #cbd5f5;
 }
+
+.btn-logout {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  border-color: #f97373;       /* vermelho suave */
+  color: #b91c1c;              /* vermelho mais escuro */
+}
+
+.btn-logout:hover {
+  background-color: #fee2e2;   /* vermelho bem clarinho */
+  border-color: #ef4444;
+}
