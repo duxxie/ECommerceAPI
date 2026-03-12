@@ -34,11 +34,20 @@ app.UseDefaultFiles();
 app.UseStaticFiles();
 
 // ------------------ Middleware ------------------
-if (app.Environment.IsDevelopment())
+// Original
+// if (app.Environment.IsDevelopment())
+// {
+//     app.UseSwagger();
+//     app.UseSwaggerUI();
+// }
+
+// Ativa o Swagger em qualquer ambiente (Production incluído)
+app.UseSwagger();
+app.UseSwaggerUI(c =>
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ecommerce API");
+    c.RoutePrefix = string.Empty; // Isso faz o Swagger abrir na raiz (url.onrender.com/)
+});
 
 app.UseHttpsRedirection();
 //app.UseAuthorization();
