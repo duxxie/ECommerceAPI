@@ -4,6 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// ------------------ Configurações do Render ------------------
+builder.WebHost.UseUrls("http://0.0.0.0:8080");
+
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontLocal", policy =>
