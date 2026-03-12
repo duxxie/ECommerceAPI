@@ -28,10 +28,10 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseCors("FrontLocal");
-
 app.UseDefaultFiles();
 app.UseStaticFiles();
+
+app.UseCors("FrontLocal");
 
 // ------------------ Middleware ------------------
 // Original
@@ -49,6 +49,7 @@ app.UseSwaggerUI(c =>
     c.RoutePrefix = string.Empty; // Isso faz o Swagger abrir na raiz (url.onrender.com/)
 });
 
+app.MapFallbackToFile("index.html");
 app.UseHttpsRedirection();
 //app.UseAuthorization();
 
